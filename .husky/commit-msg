@@ -1,0 +1,17 @@
+#!/usr/bin/env sh
+#
+# The message gate.
+#
+# This runs at the one moment the message exists and the commit does not. Every
+# check in pre-commit runs *before* the author has written anything, which is
+# precisely how a subject reading "@ feat(quality): ..." passed all six of them and
+# reached history: none of them had a message to look at.
+#
+# Rejecting here costs nothing. The staged files stay staged, the message stays in
+# .git/COMMIT_EDITMSG, and the fix is one `git commit` away. The same mistake caught
+# after a push costs a force-push and a rewrite of published history.
+#
+# $1 is the file Git wrote the message to.
+set -e
+
+node scripts/quality/validate-commit-msg.mjs "$1"

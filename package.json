@@ -19,6 +19,7 @@
     "verify:guards": "node scripts/quality/guard-staged.mjs --all",
     "verify:rules": "node scripts/quality/validate-always-apply.mjs --all",
     "verify:docs": "node scripts/quality/validate-doc-index.mjs --all",
+    "verify:msg": "node scripts/quality/validate-commit-msg.mjs",
     "test": "playwright test",
     "test:smoke": "playwright test --grep @smoke --pass-with-no-tests",
     "test:headed": "playwright test --headed",

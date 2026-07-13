@@ -15,6 +15,7 @@ Commit messages should be short, traceable, and easy to scan in git history, pul
 ## Table of Contents
 
 - [Core Convention](#core-convention)
+- [This Is Enforced](#this-is-enforced)
 - [Format](#format)
   - [Subject Line](#subject-line)
   - [Body](#body)
@@ -29,7 +30,7 @@ Commit messages should be short, traceable, and easy to scan in git history, pul
 
 ## Core Convention
 
-Follow Conventional Commit formatting with a Jira ticket in every subject line.
+Conventional Commit formatting, with the Jira ticket in the subject line.
 
 ```text
 <type>(<scope>): [PRODUCT-xxxx] <short summary>
@@ -37,6 +38,60 @@ Follow Conventional Commit formatting with a Jira ticket in every subject line.
 - brief reason for the change
 - test: <spec-file-name> (<test description>)
 ```
+
+**The ticket is optional.** [COMMIT_WORKFLOW.md](./COMMIT_WORKFLOW.md) step 4 says to
+ask for one and to proceed without it if there is none, so a commit with no ticket is
+accepted. What is _not_ optional is that a ticket, when there is one, is written
+correctly: in square brackets, in the subject, immediately after the colon. A ticket
+loose in the summary — `feat(ui): PRODUCT-1234 add login` — is rejected, because every
+tool that scrapes tickets out of history will miss it and the traceability the ticket
+exists to provide is silently absent.
+
+## This Is Enforced
+
+`.husky/commit-msg` runs `scripts/quality/validate-commit-msg.mjs` against the message
+you just wrote, before the commit object exists. A malformed message is rejected; the
+staged files stay staged and the message stays in `.git/COMMIT_EDITMSG`, so the fix is
+one `git commit` away.
+
+**Why a separate hook, when there is already a pre-commit hook doing six checks?**
+Because `pre-commit` runs _before the message exists_. It has nothing to look at.
+
+That is not a theoretical gap. This subject reached history and was pushed:
+
+```text
+@ feat(quality): enforce naming, JSDoc, and agent standards
+```
+
+A shell quoting mistake put a stray `@` and a space in front of the type. It passed all six
+pre-commit checks — every one of them was inspecting files, and none of them was
+looking at the message. The stray character is invisible in a terminal and fatal to
+anything that parses the type: a changelog generator or `semantic-release` reads that
+subject, fails to match a Conventional Commit, and **silently drops the commit from
+the release notes**. Nobody notices until the release notes are wrong.
+
+Fixing it after the push cost a force-push and a rewrite of published history. Caught
+at `commit-msg`, it costs nothing.
+
+What is rejected:
+
+| Rejected                           | Why                                                            |
+| ---------------------------------- | -------------------------------------------------------------- |
+| `@ feat(quality): enforce naming`  | Anything before the type. The pattern is anchored at `^`.      |
+| `feature(ui): add login page`      | `feature` is not a type. It is `feat`.                         |
+| `config(eslint): add jsdoc module` | `config` is a scope, not a type. Use `refactor(config):`.      |
+| `feat: add login page`             | The scope is required.                                         |
+| `feat(UI): add login page`         | The scope must be lowercase.                                   |
+| `feat(ui): PRODUCT-1234 add login` | The ticket must be bracketed: `[PRODUCT-1234]`.                |
+| A subject over 72 characters       | It stops being scannable in `git log --oneline`.               |
+| A body over 3 lines                | The diff already lists the files, and does it better.          |
+| A `Co-Authored-By:` trailer        | No agent attribution — see [AGENT_RULES.md](./AGENT_RULES.md). |
+
+`Merge`, `Revert`, `fixup!` and `squash!` messages are skipped: Git writes those, not
+you, and rejecting them would fail the one message its author never chose.
+
+The permitted types, the length limits, and whether the ticket is required all live in
+`src/config/quality/commit.mjs`. Change the policy there; the validator never changes.
 
 ## Format
 
@@ -48,11 +103,37 @@ Format:
 <type>(<scope>): [PRODUCT-xxxx] <short summary>
 ```
 
-- use a valid Conventional Commit type: `test`, `fix`, `feat`, `refactor`, or `docs`
-- for automation changes, `test` is the default type unless the change is primarily a bug fix, new framework capability, refactor, or documentation update
-- keep the scope relevant to the area changed
-- include the Jira ticket exactly once in the subject
-- make the summary action-oriented and short
+The type must be one of these, and nothing else:
+
+| Type       | Use it when                                   |
+| ---------- | --------------------------------------------- |
+| `test`     | Automation coverage changed. **The default.** |
+| `feat`     | A new framework capability.                   |
+| `fix`      | A bug was fixed.                              |
+| `refactor` | The code changed; the behaviour did not.      |
+| `docs`     | Documentation only.                           |
+| `chore`    | Dependencies, tooling, housekeeping.          |
+| `ci`       | The pipeline.                                 |
+| `perf`     | Performance.                                  |
+| `revert`   | Undoing a previous commit.                    |
+
+**One name per concept.** There is no `feature` — it is `feat`. There is no `config`
+type: `config` describes the _area_ a change touches, not the kind of change it is, so
+it belongs in the parentheses (`refactor(config):`, never `config(eslint):`). Two names
+for one concept means anything that groups commits by type produces two buckets for the
+same thing, which is the whole reason the type exists.
+
+Other rules for the subject:
+
+- for automation changes, `test` is the default unless the change is primarily a bug fix, a new framework capability, a refactor, or a documentation update
+- keep the scope relevant to the area changed, and lowercase
+- if there is a Jira ticket, put it in brackets, once, immediately after the colon
+- make the summary action-oriented and short — 72 characters at most
+- nothing may precede the type. Not a space, not a stray character.
+
+The list above is declared in `src/config/quality/commit.mjs` and enforced by
+`.husky/commit-msg`. Add a type there, not here — and only when it answers a question
+none of these already answer.
 
 ### Body
 

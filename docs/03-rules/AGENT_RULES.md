@@ -117,7 +117,9 @@ Copilot, or otherwise.
 Do not add the trailer by hand, do not pass `--co-author`, and do not let a tool
 append one.
 
-This is already enforced for Claude Code in `.claude/settings.json`:
+This is enforced twice, on purpose.
+
+`.claude/settings.json` stops Claude Code adding the trailer in the first place:
 
 ```json
 {
@@ -125,10 +127,15 @@ This is already enforced for Claude Code in `.claude/settings.json`:
 }
 ```
 
-That setting is the mechanism; this rule is the reason. Git history records who
-authored a change, and an attribution trailer on every commit makes that record say
-"an agent was involved" and nothing more — it is noise in `git log`, in `git blame`,
-and in every release note generated from them.
+And `.husky/commit-msg` rejects any commit message containing one, whoever or whatever
+wrote it. The setting is a preference and preferences can be toggled, a different tool
+can be used, or a trailer can be pasted in by hand — a rule enforced only by the
+agent's own good behaviour is not enforced at all. The hook is the gate; the setting
+just means you rarely meet it.
+
+The reason for the rule: git history records who authored a change, and an attribution
+trailer on every commit makes that record say "an agent was involved" and nothing more.
+It is noise in `git log`, in `git blame`, and in every release note generated from them.
 
 ## Ask Before Writing Documentation
 

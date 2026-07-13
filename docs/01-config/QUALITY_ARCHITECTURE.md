@@ -48,6 +48,7 @@ graph TD
         NAMING["src/config/quality/naming.mjs<br/><i>filename + folder conventions</i>"]
         GUARDS["src/config/quality/guards.mjs<br/><i>secrets, .only, size limits, alwaysApply</i>"]
         DOCS["src/config/quality/docs.mjs<br/><i>the documentation index contract</i>"]
+        COMMIT["src/config/quality/commit.mjs<br/><i>the commit message contract</i>"]
         ESLINT_C["src/config/eslint/*.mjs<br/><i>nine single-purpose modules</i>"]
         CONST["src/config/eslint/constants.mjs<br/><b>FILE_GROUPS</b> — which files, which rules"]
     end
@@ -57,12 +58,14 @@ graph TD
         GS["scripts/quality/guard-staged.mjs"]
         VA["scripts/quality/validate-always-apply.mjs"]
         VD["scripts/quality/validate-doc-index.mjs"]
+        VM["scripts/quality/validate-commit-msg.mjs"]
         ESLINT["eslint.config.mjs<br/><i>composition root, zero rules</i>"]
     end
 
     subgraph GATES["🚦 Gates — where it is enforced"]
         IDE["VS Code<br/><i>live, as you type</i>"]
-        PC[".husky/pre-commit"]
+        PC[".husky/pre-commit<br/><i>the files</i>"]
+        CM[".husky/commit-msg<br/><i>the message</i>"]
         PP[".husky/pre-push"]
         CI["CI pipeline"]
     end
@@ -71,9 +74,11 @@ graph TD
     GUARDS --> GS
     GUARDS --> VA
     DOCS --> VD
+    COMMIT --> VM
     CONST --> ESLINT_C
     ESLINT_C --> ESLINT
 
+    VM --> CM
     VF --> PC
     GS --> PC
     VA --> PC
@@ -133,7 +138,12 @@ flowchart TD
 
     S6["<b>6 · TypeScript</b><br/>tsc --noEmit<br/><i>project-wide</i>"]
     S6 -->|✗| FAIL6["✖ Rejected<br/>your page object broke<br/>a spec you did not touch"]
-    S6 -->|✓| OK(["✔ Commit created"])
+    S6 -->|✓| MSG["<b>You write the message</b>"]
+
+    MSG --> CM{{".husky/commit-msg"}}
+    CM --> S7["<b>7 · Commit message</b><br/>validate-commit-msg.mjs<br/><i>the first check with a<br/>message to look at</i>"]
+    S7 -->|✗| FAIL7["✖ Rejected<br/>@ feat(x): · feature(x): · no scope<br/>loose ticket · Co-Authored-By"]
+    S7 -->|✓| OK(["✔ Commit created"])
 
     style START fill:#1e3a5f,stroke:#4a90d9,color:#fff
     style OK fill:#1f4d3a,stroke:#4caf7d,color:#fff
@@ -143,7 +153,9 @@ flowchart TD
     style FAIL4 fill:#5f1f1f,stroke:#d9534f,color:#fff
     style FAIL5 fill:#5f1f1f,stroke:#d9534f,color:#fff
     style FAIL6 fill:#5f1f1f,stroke:#d9534f,color:#fff
+    style FAIL7 fill:#5f1f1f,stroke:#d9534f,color:#fff
     style S2 fill:#3d2f5f,stroke:#9b7fd4,color:#fff
+    style S7 fill:#5f4a1f,stroke:#d9a441,color:#fff
 ```
 
 ### Why this order
@@ -182,6 +194,28 @@ something a staged-scope check is structurally incapable of seeing:
   `Checkout.spec.ts` without that spec ever being staged. Types are the one thing
   lint-staged's file-scoped view cannot see — which is precisely why `tsc` is here
   and full ESLint is not.
+
+**Step 7 is a different hook, and it has to be.** Every check in `pre-commit` runs
+_before the message exists_ — there is nothing for them to look at. `commit-msg` is
+the first and only moment at which the message has been written and the commit has
+not yet been created.
+
+That gap was not theoretical. This subject was committed and pushed:
+
+```text
+@ feat(quality): enforce naming, JSDoc, and agent standards
+```
+
+A shell quoting mistake put a stray `@` and a space in front of the type. All six pre-commit
+checks passed it, because all six were inspecting files. The stray character is
+invisible in a terminal and fatal to anything parsing the type: a changelog generator
+reads that subject, fails to match a Conventional Commit, and drops the commit from
+the release notes without a word. Fixing it after the push cost a force-push and a
+rewrite of published history. Caught at `commit-msg`, it costs one `git commit` —
+the staged files stay staged and the message stays in `.git/COMMIT_EDITMSG`.
+
+The format is declared in `src/config/quality/commit.mjs` and documented in
+[COMMIT_MESSAGES.md](../03-rules/COMMIT_MESSAGES.md).
 
 ---
 
@@ -488,14 +522,15 @@ or for `eslint-disable` on a Playwright rule. Those are the contract.
 
 ## 10. Commands
 
-| Command                           | Does                                                     |
-| --------------------------------- | -------------------------------------------------------- |
-| `npm run validate`                | Everything CI runs: typecheck → lint → format → markdown |
-| `npm run fix`                     | Auto-repair: `lint:fix` then `format`                    |
-| `npm run quality` / `quality:fix` | Aliases for the two above                                |
-| `npm run verify:names`            | Filename conventions across the whole tree               |
-| `npm run verify:guards`           | Content guards across the whole tree                     |
-| `npm run verify:rules`            | `alwaysApply: true` ⇔ imported by `CLAUDE.md`            |
-| `npm run verify:docs`             | Every page linked from its folder's `README.md`          |
-| `npm test`                        | Playwright                                               |
-| `npm run test:smoke`              | `@smoke`-tagged tests only                               |
+| Command                           | Does                                                         |
+| --------------------------------- | ------------------------------------------------------------ |
+| `npm run validate`                | Everything CI runs: typecheck → lint → format → markdown     |
+| `npm run fix`                     | Auto-repair: `lint:fix` then `format`                        |
+| `npm run quality` / `quality:fix` | Aliases for the two above                                    |
+| `npm run verify:names`            | Filename conventions across the whole tree                   |
+| `npm run verify:guards`           | Content guards across the whole tree                         |
+| `npm run verify:rules`            | `alwaysApply: true` ⇔ imported by `CLAUDE.md`                |
+| `npm run verify:docs`             | Every page linked from its folder's `README.md`              |
+| `npm run verify:msg <file>`       | A commit message against the format (what `commit-msg` runs) |
+| `npm test`                        | Playwright                                                   |
+| `npm run test:smoke`              | `@smoke`-tagged tests only                                   |
