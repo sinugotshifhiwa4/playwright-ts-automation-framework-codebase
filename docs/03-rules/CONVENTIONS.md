@@ -35,6 +35,7 @@ the rules are; that page says how they are executed.
   - [Cleanup Specs](#cleanup-specs)
   - [Test Folder Structure](#test-folder-structure)
 - [Documentation Files](#documentation-files)
+- [Import Ordering And Comment Style](#import-ordering-and-comment-style)
 - [The Enforced Patterns](#the-enforced-patterns)
 - [What Is Not Enforced](#what-is-not-enforced)
 - [Practical Outcome](#practical-outcome)
@@ -223,6 +224,24 @@ reject every working skill in the repository.
 
 For how to _write_ a documentation page — structure, frontmatter, diagrams, the
 definition of done — see [DOCUMENTATION_PROMPT_GUIDE.md](../DOCUMENTATION_PROMPT_GUIDE.md).
+
+## Import Ordering And Comment Style
+
+Source files in `src/` follow the same layout conventions as the lint rules:
+
+- Imports are grouped and ordered by type: built-in and external modules first,
+  then internal modules, then parent/sibling/index imports, and finally type-only
+  imports.
+- Imports from the same group are sorted alphabetically.
+- Comments inside code should be concise, explanatory, and written as full
+  sentences when they describe behavior or intent.
+- JSDoc comments should avoid writing explicit types in tags such as
+  `@param {string}` or `@returns {boolean}`; the signature already carries the
+  type information.
+
+This is enforced by ESLint through the import-order and JSDoc rules, so a file that
+violates the ordering or comment format will be rejected before it reaches the
+branch.
 
 ## The Enforced Patterns
 

@@ -1,5 +1,4 @@
 import js from "@eslint/js";
-
 import { ALL_CODE } from "./constants.mjs";
 
 /**
@@ -44,6 +43,7 @@ export default [
       "prefer-const": "error",
       "prefer-template": "error",
       "object-shorthand": ["error", "properties"],
+      "object-curly-spacing": ["error", "never"],
 
       // Superseded by import/no-duplicates, which understands type-only imports.
       "no-duplicate-imports": "off",

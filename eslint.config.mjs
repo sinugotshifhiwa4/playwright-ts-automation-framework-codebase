@@ -1,5 +1,4 @@
 import prettier from "eslint-config-prettier";
-
 import base from "./src/config/eslint/base.mjs";
 import globals from "./src/config/eslint/globals.mjs";
 import ignores from "./src/config/eslint/ignores.mjs";

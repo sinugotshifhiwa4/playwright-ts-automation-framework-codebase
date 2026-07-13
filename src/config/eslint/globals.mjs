@@ -1,6 +1,5 @@
 import globals from "globals";
 import tseslint from "typescript-eslint";
-
 import { FILE_GROUPS, ROOT_DIR, TSCONFIG } from "./constants.mjs";
 
 /**

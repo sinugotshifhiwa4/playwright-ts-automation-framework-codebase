@@ -30,7 +30,6 @@
 
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
-
 import { Report, dim } from "./lib/report.mjs";
 import {
   DOCS_INDEX,

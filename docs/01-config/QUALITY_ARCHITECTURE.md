@@ -34,6 +34,7 @@ layers see different things.
   - [What each module owns](#what-each-module-owns)
 - [6. The custom rule](#6-the-custom-rule)
 - [7. Conventions](#7-conventions)
+  - [Import ordering and JSDoc style](#import-ordering-and-jsdoc-style)
 - [8. Skipping a test](#8-skipping-a-test)
 - [9. Other escape hatches](#9-other-escape-hatches)
 - [10. Commands](#10-commands)

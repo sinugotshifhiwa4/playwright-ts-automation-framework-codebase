@@ -19,7 +19,6 @@
  */
 
 import { readFileSync } from "node:fs";
-
 import { Report } from "./lib/report.mjs";
 import {
   COMMIT_MSG,

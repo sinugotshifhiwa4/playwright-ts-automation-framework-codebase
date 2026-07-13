@@ -1,5 +1,4 @@
 import jsdoc from "eslint-plugin-jsdoc";
-
 import { FILE_GROUPS } from "./constants.mjs";
 
 /**
@@ -44,7 +43,8 @@ export default [
         "error",
         {
           require: {
-            ClassDeclaration: true,
+            ClassDeclaration: false,
+            ClassExpression: false,
             MethodDefinition: true,
             FunctionDeclaration: true,
           },

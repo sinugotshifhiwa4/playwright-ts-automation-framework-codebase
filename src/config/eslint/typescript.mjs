@@ -1,5 +1,4 @@
 import tseslint from "typescript-eslint";
-
 import { FILE_GROUPS } from "./constants.mjs";
 
 /**

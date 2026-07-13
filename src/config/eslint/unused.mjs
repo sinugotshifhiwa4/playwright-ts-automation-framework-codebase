@@ -1,5 +1,4 @@
 import unusedImports from "eslint-plugin-unused-imports";
-
 import { ALL_CODE } from "./constants.mjs";
 
 /**

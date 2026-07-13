@@ -1,5 +1,4 @@
 import importPlugin from "eslint-plugin-import";
-
 import { ALL_CODE, TSCONFIG } from "./constants.mjs";
 
 /**
@@ -67,7 +66,7 @@ export default [
             ["parent", "sibling", "index"],
             ["type"],
           ],
-          "newlines-between": "always",
+          "newlines-between": "never",
           alphabetize: { order: "asc", caseInsensitive: true },
         },
       ],

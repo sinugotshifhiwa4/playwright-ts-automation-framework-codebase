@@ -1,5 +1,4 @@
 import playwright from "eslint-plugin-playwright";
-
 import { FILE_GROUPS } from "./constants.mjs";
 import framework from "./rules/index.mjs";
 

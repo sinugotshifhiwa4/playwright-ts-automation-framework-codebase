@@ -1,6 +1,6 @@
 ---
 name: code-quality
-description: The code standards every method must meet — the JSDoc block, its exact format, and the ESLint rules that reject a method without one.
+description: The code standards every method must meet — the JSDoc block and its exact format, the syntax rules that decide how the body is written, and where the ESLint rules enforcing both actually come from.
 alwaysApply: true
 ---
 
@@ -8,13 +8,14 @@ alwaysApply: true
 
 **[← Back to Main Documentation](../../README.md)**
 
-This page defines the standards a method must meet before it can be committed. It
-currently covers one: **every method carries a JSDoc block.**
+This page defines the standards a method must meet before it can be committed. Two
+of them: **every method carries a JSDoc block**, and a handful of **syntax rules**
+decide how the body of that method is written.
 
-The rule is enforced by ESLint, not by review. `src/config/eslint/jsdoc.mjs`
-declares it, and a method without a documentation block fails `npm run lint` — so
-it is underlined in the editor as you write it, and rejected by `.husky/pre-commit`
-if you push past that.
+Both are enforced by ESLint, not by review. `src/config/eslint/jsdoc.mjs` declares
+the first and `src/config/eslint/typescript.mjs` the second, so a method that breaks
+either fails `npm run lint` — underlined in the editor as you write it, and rejected
+by `.husky/pre-commit` if you push past that.
 
 For _naming_ — what a file is called and where it lives — see
 [CONVENTIONS.md](./CONVENTIONS.md).
@@ -27,6 +28,11 @@ For _naming_ — what a file is called and where it lives — see
   - [Worked Example](#worked-example)
 - [Why Private Methods Too](#why-private-methods-too)
 - [Why Types Are Not Written In JSDoc](#why-types-are-not-written-in-jsdoc)
+- [Syntax Rules](#syntax-rules)
+  - [Why ?? And Not ||](#why--and-not-)
+  - [Why No Non-Null Assertion](#why-no-non-null-assertion)
+- [Import Ordering](#import-ordering)
+- [Where The Rules Come From](#where-the-rules-come-from)
 - [What Is Enforced](#what-is-enforced)
 - [Practical Outcome](#practical-outcome)
 
@@ -119,7 +125,120 @@ worse than no documentation, because it is trusted.
 The description is the part a type cannot express. That is why the description is
 mandatory and the type is banned.
 
+## Syntax Rules
+
+Most lint rules catch a mistake after you have made it. Five change how you type the
+line in the first place, so they are the ones worth knowing before you start:
+
+| Write this          | Not this           | Rule                                               |
+| ------------------- | ------------------ | -------------------------------------------------- |
+| `a ?? b`            | `a \|\| b`         | `@typescript-eslint/prefer-nullish-coalescing`     |
+| `a?.b`              | `a && a.b`         | `@typescript-eslint/prefer-optional-chain`         |
+| `import type { X }` | `import { X }`     | `@typescript-eslint/consistent-type-imports`       |
+| a checked read      | `value!`           | `@typescript-eslint/no-non-null-assertion`         |
+| `(): string`        | an inferred return | `@typescript-eslint/explicit-function-return-type` |
+
+The last three are declared by hand in
+[src/config/eslint/typescript.mjs](../../src/config/eslint/typescript.mjs). The first
+two are not — they arrive inside a preset, which is the subject of
+[Where The Rules Come From](#where-the-rules-come-from).
+
+### Why ?? And Not ||
+
+The two differ on exactly the values a test framework deals in.
+
+`||` falls back on every falsy value, so `""`, `0`, and `false` all count as absent.
+`timeout || 30_000` throws away a deliberate `timeout: 0`, and `retries || 3` throws
+away `retries: 0` — in both cases silently, and in favour of a default the caller
+explicitly overrode.
+
+`??` falls back only on `null` and `undefined`, which is what "not configured"
+actually means. The rule exists because the difference between the two only shows up
+on the inputs nobody tests.
+
+### Why No Non-Null Assertion
+
+`value!` is you telling the compiler you know the value is there, with nothing
+checking that you do. It does not make the value present — it removes the warning
+that it might not be.
+
+`src/config/environment/variables/internal/environment.urls.ts` is the worked
+example. It read `process.env.PORTAL_BASE_URL!`, which claims a variable is set that
+nothing had guaranteed to be set. With the assertion, an unset variable flows on as
+`undefined` and surfaces later, somewhere unrelated, as a broken URL. The file now
+performs a checked read instead, and an unset variable is rejected by name at the
+moment it is resolved.
+
+## Import Ordering
+
+Import ordering is part of the repository's code quality gate. Files in `src/`
+must place imports in a consistent order so the dependency graph is easy to scan and
+review.
+
+The current ESLint configuration groups imports as follows:
+
+1. Built-in and external modules.
+2. Internal modules.
+3. Parent, sibling, and index imports.
+4. Type-only imports.
+
+The order is alphabetized within each group, and the rule is enforced by
+`import/order` in [src/config/eslint/imports.mjs](../../src/config/eslint/imports.mjs).
+
+## Where The Rules Come From
+
+Most of the rules in force are never named anywhere in this repository. They arrive
+inside two presets that `src/config/eslint/typescript.mjs` spreads in before it
+declares a single rule of its own:
+
+```mermaid
+graph LR
+    P1["<b>recommendedTypeChecked</b><br/><i>typescript-eslint preset</i>"] --> TS
+    P2["<b>stylisticTypeChecked</b><br/><i>typescript-eslint preset</i><br/>prefer-nullish-coalescing<br/>prefer-optional-chain"] --> TS
+
+    TS["<b>src/config/eslint/typescript.mjs</b><br/><i>presets, then its own rules</i><br/>no-non-null-assertion<br/>consistent-type-imports"] --> ROOT
+
+    OTHER["<b>base · imports · jsdoc</b><br/><i>the other modules</i>"] --> ROOT
+
+    ROOT["<b>eslint.config.mjs</b><br/><i>composition root</i>"] --> EFF(["<b>The effective config</b><br/><i>what actually runs</i>"])
+
+    EFF -.->|"npx eslint --print-config"| ASK(["What is really on,<br/>for this file?"])
+
+    style P1 fill:#3d2f5f,stroke:#9b7fd4,color:#fff
+    style P2 fill:#3d2f5f,stroke:#9b7fd4,color:#fff
+    style EFF fill:#1f4d3a,stroke:#4caf7d,color:#fff
+    style ASK fill:#1e3a5f,stroke:#4a90d9,color:#fff
+```
+
+**Why it is built this way.** The presets are the floor, and adopting them wholesale
+is deliberate: they are maintained by the typescript-eslint team and they improve
+without anyone here doing anything. The cost is that the config no longer tells you
+what is enforced. `prefer-nullish-coalescing` is an error in this repository, and
+grepping the entire tree for the word "nullish" finds nothing — because the rule is
+inside `stylisticTypeChecked`, at
+[typescript.mjs:24](../../src/config/eslint/typescript.mjs).
+
+This page therefore does **not** list every rule, and no page should. The two presets
+are on the order of a hundred rules between them and they change with each
+`typescript-eslint` release, so a hand-copied table would be a second source of truth
+that nothing checks — stale at the next `npm update`, and confidently wrong in a way
+a reader cannot detect. That is a worse failure than the gap it closes.
+
+Instead: the presets are named above, the rules that shape everyday code are in
+[Syntax Rules](#syntax-rules), and the effective config is interrogated directly
+rather than trusted:
+
+```bash
+npx eslint --print-config src/config/environment/variables/variableValidator.ts
+```
+
+That prints every rule and its severity for that one file, presets included. It is
+the only answer that cannot go out of date.
+
 ## What Is Enforced
+
+The table below covers the JSDoc rules only. It is not the full set — see
+[Where The Rules Come From](#where-the-rules-come-from) for the rest.
 
 `src/config/eslint/jsdoc.mjs`, scoped to `src/**/*.ts`:
 
