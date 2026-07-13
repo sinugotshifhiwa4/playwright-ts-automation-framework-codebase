@@ -1,6 +1,6 @@
 ---
 name: agent-rules
-description: How an AI assistant must behave in this repository — answer before acting, never create a branch, ask before writing documentation, and never sign a commit with an attribution trailer.
+description: How an AI assistant must behave in this repository — answer before acting, never guess at a path that does not exist, never create a branch, ask before writing documentation, and never sign a commit with an attribution trailer.
 alwaysApply: true
 ---
 
@@ -23,6 +23,7 @@ _writing a method_ live in [CODE_QUALITY.md](./CODE_QUALITY.md).
 
 - [The Gates](#the-gates)
 - [Answer Before Acting](#answer-before-acting)
+- [Never Guess A Broken Path](#never-guess-a-broken-path)
 - [Never Create A Branch](#never-create-a-branch)
 - [Never Commit Without Approval](#never-commit-without-approval)
 - [Never Add An Attribution Trailer](#never-add-an-attribution-trailer)
@@ -31,7 +32,7 @@ _writing a method_ live in [CODE_QUALITY.md](./CODE_QUALITY.md).
 
 ## The Gates
 
-Four points where the assistant must stop. They are drawn in red because stopping
+Five points where the assistant must stop. They are drawn in red because stopping
 at them is the entire rule:
 
 ```mermaid
@@ -47,10 +48,14 @@ flowchart TD
     BRANCH -->|"no"| STOP2["<b>Stop.</b> Ask the user to create one.<br/><i>never create it yourself</i>"]
     BRANCH -->|"yes"| WORK["<b>Plan, then implement</b><br/><i>see TASK_PLANNING.md</i>"]
 
-    WORK --> DOCS{"<b>3 · Major change<br/>or new module?</b>"}
+    WORK --> PATH{"<b>3 · A path in the code<br/>points at nothing?</b>"}
+    PATH -->|"yes"| STOP3["<b>Stop.</b> Report it. Ask what it should be.<br/><i>never infer the intended target</i>"]
+    STOP3 -->|"the user answers"| WORK
+    PATH -->|"no"| DOCS{"<b>4 · Major change<br/>or new module?</b>"}
+
     DOCS -->|"yes"| ASK_DOCS["<b>Ask</b> whether docs are wanted,<br/>and where. Do not write them."]
     DOCS -->|"no"| COMMIT
-    ASK_DOCS --> COMMIT{"<b>4 · Commit</b>"}
+    ASK_DOCS --> COMMIT{"<b>5 · Commit</b>"}
 
     COMMIT --> GATES["<b>Follow COMMIT_WORKFLOW.md</b><br/>summary → approval → message<br/>→ Jira ticket → commit<br/><i>no attribution trailer</i>"]
     GATES --> DONE(["✔ Committed"])
@@ -60,9 +65,11 @@ flowchart TD
     style STOP1 fill:#1f4d3a,stroke:#4caf7d,color:#fff
     style ASK1 fill:#5f1f1f,stroke:#d9534f,color:#fff
     style BRANCH fill:#5f1f1f,stroke:#d9534f,color:#fff
+    style PATH fill:#5f1f1f,stroke:#d9534f,color:#fff
     style DOCS fill:#5f1f1f,stroke:#d9534f,color:#fff
     style COMMIT fill:#5f1f1f,stroke:#d9534f,color:#fff
     style STOP2 fill:#5f1f1f,stroke:#d9534f,color:#fff
+    style STOP3 fill:#5f1f1f,stroke:#d9534f,color:#fff
 ```
 
 **Why it is built this way.** Every gate sits _before_ the irreversible act, never
@@ -86,6 +93,43 @@ A question is a question even when the answer obviously implies an edit. "Why is
 this test flaky?" is a request for a diagnosis, not a licence to rewrite the test —
 and an assistant that supplies both has destroyed the evidence the user was asking
 about.
+
+## Never Guess A Broken Path
+
+**When an import, a path, or a reference points at something that does not exist,
+stop and ask. Do not infer what it was meant to point at.**
+
+This gate fires in the middle of the work rather than at a fixed point in the
+request, so it has no natural moment to be remembered — which is exactly why it is
+written down. Report the finding:
+
+- the file and line holding the reference
+- what it points at, and the fact that nothing is there
+- what you believe was intended, as a **question**, not as an edit
+
+Then wait.
+
+**Why.** A path that points at nothing is evidence, and the assistant is not the one
+who can read it. It has at least three meanings, and they demand opposite responses:
+
+| What the broken path might mean     | What is actually needed          |
+| ----------------------------------- | -------------------------------- |
+| A typo in the import                | Fix the import                   |
+| The file has not been written yet   | Write the file — or stop and ask |
+| The file exists, in the wrong place | Move the file, not the import    |
+
+Only the author knows which. An assistant that picks the nearest plausible target
+and rewrites the import has chosen the first reading by default, silently — and if
+the truth was the second or third, the "fix" is worse than the error it removed. The
+red squiggle was pointing at a real gap; now it is gone, the code compiles, and the
+gap is still there with nothing left to announce it.
+
+This is the same failure as [Answer Before Acting](#answer-before-acting), wearing a
+different disguise. The compiler asked a question. It did not ask for an edit.
+
+The rule holds however obvious the intended target looks. `../../../../utils/` when
+`../../../utils/` exists is almost certainly an off-by-one — and "almost certainly"
+is not a standard anyone should be committing against.
 
 ## Never Create A Branch
 

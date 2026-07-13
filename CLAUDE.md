@@ -26,6 +26,10 @@ constraints are impossible to miss:
 
 - **Answer before acting.** A question gets an answer, not an edit. Explain the
   context and the options, then ask "Do you want me to make these changes?" and wait.
+- **Never guess a broken path.** When an import or reference points at a file that
+  does not exist, stop. Report the file, the line, and what is missing — then ask what
+  it should be. Do not infer the intended target, however obvious it looks: the broken
+  path may mean the file is unwritten or misplaced, and "fixing" the import hides that.
 - **Never commit without approval.** Run `npm run validate`, present a summary of
   what changed and why, and wait for an explicit yes. Then draft the commit message,
   show it, and ask for the Jira ticket (`PRODUCT-xxxx`). Never stage and commit in
