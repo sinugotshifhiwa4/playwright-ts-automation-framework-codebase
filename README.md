@@ -17,7 +17,6 @@ The framework provides reusable page objects, shared test fixtures, multi-browse
 | ESLint              | Static analysis and code quality enforcement  |
 | Prettier            | Consistent code formatting                    |
 | Husky + lint-staged | Pre-commit quality gates                      |
-| cspell              | Spell checking across code and docs           |
 | Ortoni Report       | HTML test reporting                           |
 | Winston             | Structured runtime logging                    |
 | Luxon               | Date and time utilities                       |

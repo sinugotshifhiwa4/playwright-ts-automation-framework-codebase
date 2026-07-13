@@ -12,7 +12,7 @@ node_modules/
 /playwright/.auth/
 /.auth/
 
-# Build + runtime artefacts
+# Build + runtime artifacts
 /dist/
 /logs/
 /downloads/

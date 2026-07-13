@@ -159,6 +159,39 @@ export const FORBIDDEN_PATHS = [
 export const POLICY_PATHS = [/^src\/config\/quality\//, /^scripts\/quality\//];
 
 /**
+ * The contract that makes a standing rule real.
+ *
+ * A document declares itself a standing rule with `alwaysApply: true`, but that
+ * key is inert on its own — no tool reads it. What actually puts a rule in front
+ * of Claude is an `@import` line in CLAUDE.md. So the marker and the manifest must
+ * agree, in both directions:
+ *
+ *   alwaysApply: true   ⟺   imported by CLAUDE.md
+ *
+ * Enforced by scripts/quality/validate-always-apply.mjs. Without this check the
+ * failure is silent and the worst kind: a rule that reads as binding, is written
+ * down, is reviewed and approved — and is never loaded, so nothing obeys it.
+ */
+export const ALWAYS_APPLY = {
+  id: "always-apply",
+
+  /** The file whose @imports decide what is actually loaded every session. */
+  manifest: "CLAUDE.md",
+
+  /** Documents allowed to declare themselves standing rules. */
+  scope: (p) => p.startsWith("docs/") && p.endsWith(".md"),
+
+  hints: {
+    notImported: (manifest) =>
+      `Add "@<path>" to ${manifest}, or set alwaysApply: false. As written, this rule is never loaded.`,
+    notDeclared: (manifest) =>
+      `${manifest} imports this file, so it applies to every session. Set alwaysApply: true, or remove the import.`,
+    missingTarget: (manifest) =>
+      `${manifest} imports a file that does not exist. Fix the path or drop the line.`,
+  },
+};
+
+/**
  * Flagged, not blocked, unless SETTINGS.blockTodo is true.
  *
  * Code only. A TODO in prose is a sentence, not a loose end — documentation that

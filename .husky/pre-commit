@@ -13,26 +13,32 @@
 # Filenames are the exception, and can run first: lint-staged fixes contents, it
 # never renames a file, so its result cannot change the answer.
 #
-# Step 4 is the one project-wide check that cannot be skipped: TypeScript errors
-# cross file boundaries, so editing a page object can break a spec that is not
-# staged. Types are the only thing lint-staged's file-scoped view cannot see.
+# Steps 4 and 5 are the two project-wide checks that cannot be skipped. TypeScript
+# errors cross file boundaries, so editing a page object can break a spec that is
+# not staged — types are the only thing lint-staged's file-scoped view cannot see.
+# The always-apply check is project-wide for a different reason: it compares two
+# files, and the edit that breaks it (deleting an @import from CLAUDE.md) leaves
+# the rule's own file untouched, so a staged-scope check would never see it.
 set -e
 
-echo "▸ 1/4  Filename conventions"
+echo "▸ 1/5  Filename conventions"
 node scripts/quality/validate-filenames.mjs
 
-echo "▸ 2/4  lint-staged  (eslint --fix → prettier --write → re-stage)"
+echo "▸ 2/5  lint-staged  (eslint --fix → prettier --write → re-stage)"
 npx lint-staged
 
-echo "▸ 3/4  Content guards (secrets, .only, console.log, conflicts, file size)"
+echo "▸ 3/5  Content guards (secrets, .only, console.log, conflicts, file size)"
 node scripts/quality/guard-staged.mjs
+
+echo "▸ 4/5  Always-apply rules (alwaysApply: true ⇔ imported by CLAUDE.md)"
+node scripts/quality/validate-always-apply.mjs
 
 # Unlike every check above it, this one reads the working tree rather than the
 # index — a true index-scoped typecheck would need the whole project checked out
 # to a temp directory, which costs more than it is worth on every commit. The
 # gap is real: with `git add -p`, unstaged code can make a partially-staged
 # commit typecheck clean here and still break CI. pre-push closes it.
-echo "▸ 4/4  TypeScript (project-wide, working tree)"
+echo "▸ 5/5  TypeScript (project-wide, working tree)"
 npx tsc --noEmit
 
 echo "✔ pre-commit passed"

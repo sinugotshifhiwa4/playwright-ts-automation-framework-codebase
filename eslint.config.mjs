@@ -4,6 +4,7 @@ import base from "./src/config/eslint/base.mjs";
 import globals from "./src/config/eslint/globals.mjs";
 import ignores from "./src/config/eslint/ignores.mjs";
 import imports from "./src/config/eslint/imports.mjs";
+import jsdoc from "./src/config/eslint/jsdoc.mjs";
 import playwright from "./src/config/eslint/playwright.mjs";
 import typescript from "./src/config/eslint/typescript.mjs";
 import unused from "./src/config/eslint/unused.mjs";
@@ -22,6 +23,7 @@ import unused from "./src/config/eslint/unused.mjs";
  *   typescript  correct types, correct async           (typed TS)
  *   imports     a healthy module graph                 (all code)
  *   unused      no dead imports                        (all code)
+ *   jsdoc       every method documented                (src only)
  *   playwright  correct tests                          (specs only)
  *   prettier    disables every rule Prettier owns      (whole run)
  *
@@ -41,6 +43,7 @@ export default [
   ...typescript,
   ...imports,
   ...unused,
+  ...jsdoc,
   ...playwright,
   prettier,
 ];

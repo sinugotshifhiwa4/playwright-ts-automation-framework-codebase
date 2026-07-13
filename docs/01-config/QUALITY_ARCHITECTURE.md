@@ -1,4 +1,12 @@
-# Framework Architecture
+---
+name: quality-architecture
+description: How the quality tooling fits together — policy declared once as data in src/config/, dumb executors in scripts/, and the gates that enforce it (ESLint, pre-commit, pre-push, CI). Read before changing any configuration.
+alwaysApply: false
+---
+
+# Quality Architecture
+
+**[← Back to Main Documentation](../../README.md)**
 
 This document explains how the tooling fits together. It is the file to read
 before changing any configuration, because almost every file in this repository
@@ -14,6 +22,21 @@ Everything in `scripts/` and `.husky/` is a dumb executor of that data. When a
 rule appears to be enforced twice — `console.log` is banned by both ESLint and
 the commit guard — that overlap is deliberate and documented, because the two
 layers see different things.
+
+## Table of Contents
+
+- [1. The layers](#1-the-layers)
+- [2. The commit path](#2-the-commit-path)
+  - [Why this order](#why-this-order)
+- [3. The push path](#3-the-push-path)
+- [4. Why ESLint and the guards overlap](#4-why-eslint-and-the-guards-overlap)
+- [5. ESLint composition](#5-eslint-composition)
+  - [What each module owns](#what-each-module-owns)
+- [6. The custom rule](#6-the-custom-rule)
+- [7. Conventions](#7-conventions)
+- [8. Skipping a test](#8-skipping-a-test)
+- [9. Other escape hatches](#9-other-escape-hatches)
+- [10. Commands](#10-commands)
 
 ---
 
@@ -306,20 +329,28 @@ register it in `rules/index.mjs`, and reference it as `framework/<rule-name>`.
 
 ## 7. Conventions
 
-Declared in `src/config/quality/naming.mjs`. A filename should tell you what a file
-_is_ before you open it.
+**The conventions themselves live in
+[docs/03-rules/CONVENTIONS.md](../03-rules/CONVENTIONS.md)** — every filename and
+folder rule, what each one is for, and which of them are enforced. They are not
+repeated here, because a rule written down twice is a rule that will eventually
+disagree with itself.
 
-| Kind        | Convention                   | Example                                      |
-| ----------- | ---------------------------- | -------------------------------------------- |
-| Spec        | PascalCase + `.spec.ts`      | `Login.spec.ts`, `APIAuthentication.spec.ts` |
-| Page object | PascalCase, `Page` suffix    | `LoginPage.ts`, `CheckoutPage.ts`            |
-| Interface   | `I` + PascalCase             | `ILogin.ts`, `ITestData.ts`                  |
-| Enum        | PascalCase + `.enum.ts`      | `UserRole.enum.ts`                           |
-| Types       | PascalCase + `.types.ts`     | `Login.types.ts`                             |
-| Constants   | PascalCase + `.constants.ts` | `Api.constants.ts`                           |
-| Utility     | PascalCase                   | `DateUtils.ts`, `ApiClient.ts`               |
-| Tooling     | lowercase, hyphenated        | `guard-staged.mjs`                           |
-| **Folder**  | **lowercase, hyphenated**    | `tests/auth/`, `src/test-data/`              |
+What belongs on _this_ page is the mechanism. The conventions are declared as data
+in `src/config/quality/naming.mjs` and executed by
+`scripts/quality/validate-filenames.mjs`, which is the pattern described in §1:
+
+- **Policy** — `naming.mjs` holds a table of rules. Each entry says which paths it
+  `appliesTo` and what makes one `isValid`.
+- **Mechanism** — `validate-filenames.mjs` walks the files and applies the table. It
+  does not know what a page object is, and it never changes when a convention does.
+- **Gate** — `.husky/pre-commit` checks the staged files; `.husky/pre-push` checks
+  the whole tree with `--all`, which is what catches a file renamed into violation
+  by a merge rather than by you.
+
+Adding a convention is therefore appending one object to `FILE_RULES`. That table
+also carries a `good` and a `bad` example per rule, which is what the rejection
+message prints — so the policy, the enforcement, and the error a contributor
+actually reads all come from the same source and cannot drift apart.
 
 ---
 
