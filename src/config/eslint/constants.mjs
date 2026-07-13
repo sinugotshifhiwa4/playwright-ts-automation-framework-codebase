@@ -11,7 +11,7 @@ const here = path.dirname(fileURLToPath(import.meta.url));
  * hook (whose cwd is the repo root), or from the VS Code ESLint extension
  * (whose cwd is the workspace folder).
  */
-export const ROOT_DIR = path.resolve(here, "..", "..");
+export const ROOT_DIR = path.resolve(here, "..", "..", "..");
 
 /** The tsconfig that powers type-aware linting. Must match tsconfig.json. */
 export const TSCONFIG = "./tsconfig.json";

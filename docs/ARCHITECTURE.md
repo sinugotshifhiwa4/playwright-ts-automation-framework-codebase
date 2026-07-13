@@ -9,7 +9,7 @@ The organising idea is simple:
 
 > **Policy is data. Mechanism is code. Nothing is enforced in two places by accident.**
 
-Every rule the framework enforces is declared once, as data, in `config/`.
+Every rule the framework enforces is declared once, as data, in `src/config/`.
 Everything in `scripts/` and `.husky/` is a dumb executor of that data. When a
 rule appears to be enforced twice — `console.log` is banned by both ESLint and
 the commit guard — that overlap is deliberate and documented, because the two
@@ -22,10 +22,10 @@ layers see different things.
 ```mermaid
 graph TD
     subgraph POLICY["Policy — declared once, as data"]
-        NAMING["config/quality/naming.mjs<br/><i>filename + folder conventions</i>"]
-        GUARDS["config/quality/guards.mjs<br/><i>secrets, .only, size limits</i>"]
-        ESLINT_C["config/eslint/*.mjs<br/><i>eight single-purpose modules</i>"]
-        CONST["config/eslint/constants.mjs<br/><b>FILE_GROUPS</b> — which files, which rules"]
+        NAMING["src/config/quality/naming.mjs<br/><i>filename + folder conventions</i>"]
+        GUARDS["src/config/quality/guards.mjs<br/><i>secrets, .only, size limits</i>"]
+        ESLINT_C["src/config/eslint/*.mjs<br/><i>eight single-purpose modules</i>"]
+        CONST["src/config/eslint/constants.mjs<br/><b>FILE_GROUPS</b> — which files, which rules"]
     end
 
     subgraph MECHANISM["⚙️ Mechanism — dumb executors"]
@@ -279,7 +279,7 @@ common way to break the setup.
 
 ## 6. The custom rule
 
-`config/eslint/rules/no-duplicate-titles.mjs` rejects two tests, or two describe
+`src/config/eslint/rules/no-duplicate-titles.mjs` rejects two tests, or two describe
 blocks, sharing a title in the same scope.
 
 Duplicate titles matter because Playwright's HTML report, its `--grep` filter and
@@ -306,7 +306,7 @@ register it in `rules/index.mjs`, and reference it as `framework/<rule-name>`.
 
 ## 7. Conventions
 
-Declared in `config/quality/naming.mjs`. A filename should tell you what a file
+Declared in `src/config/quality/naming.mjs`. A filename should tell you what a file
 _is_ before you open it.
 
 | Kind        | Convention                   | Example                                      |
@@ -411,12 +411,12 @@ forever.
 A gate with no escape hatch gets bypassed with `--no-verify`, which is strictly
 worse than no gate. Each hatch is deliberate and narrow:
 
-| Situation                             | Hatch                                                      |
-| ------------------------------------- | ---------------------------------------------------------- |
-| A secret pattern false-positives      | Append `quality:allow-secret` to the line                  |
-| A test is genuinely platform-specific | Conditional skip — see §8                                  |
-| TODO/FIXME should block, not warn     | `SETTINGS.blockTodo = true` in `config/quality/guards.mjs` |
-| Smoke tests should always run on push | `git config --local hooks.smoke true`                      |
+| Situation                             | Hatch                                                          |
+| ------------------------------------- | -------------------------------------------------------------- |
+| A secret pattern false-positives      | Append `quality:allow-secret` to the line                      |
+| A test is genuinely platform-specific | Conditional skip — see §8                                      |
+| TODO/FIXME should block, not warn     | `SETTINGS.blockTodo = true` in `src/config/quality/guards.mjs` |
+| Smoke tests should always run on push | `git config --local hooks.smoke true`                          |
 
 There is deliberately **no** hatch for `.only`, for `console.log` in TypeScript,
 or for `eslint-disable` on a Playwright rule. Those are the contract.

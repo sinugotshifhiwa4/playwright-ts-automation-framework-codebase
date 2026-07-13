@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Content guards: scans the *staged bytes* of every file for things that must
- * never reach a shared branch. Policy is declared in config/quality/guards.mjs.
+ * never reach a shared branch. Policy is declared in src/config/quality/guards.mjs.
  *
  * This is the layer ESLint cannot be. ESLint reads TypeScript it has been
  * configured to parse; this reads every byte of every staged file, including
@@ -28,7 +28,7 @@ import {
   SECRET_PATTERNS,
   SETTINGS,
   TODO_RULE,
-} from "../../config/quality/guards.mjs";
+} from "../../src/config/quality/guards.mjs";
 
 const scanAll = process.argv.includes("--all");
 const files = scanAll ? trackedFiles() : stagedFiles();
@@ -80,7 +80,7 @@ for (const file of files) {
   // 3. Content rules. Two categories of file are skipped:
   //
   //    - Binary. Scanning a PNG for "password" yields nothing but noise.
-  //    - The policy layer itself. config/quality/guards.mjs spells out every
+  //    - The policy layer itself. src/config/quality/guards.mjs spells out every
   //      banned pattern in plain text, so scanning it against those patterns
   //      makes the framework report itself. See POLICY_PATHS.
   // ---------------------------------------------------------------------------

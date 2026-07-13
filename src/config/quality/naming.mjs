@@ -38,7 +38,7 @@ const inFolder = (filePath, folder) => filePath.split("/").slice(0, -1).includes
  * Folders whose subdirectories must be lowercase. Anything outside these trees
  * (node_modules, .husky, generated output) is none of our business.
  */
-export const MANAGED_ROOTS = ["src", "tests", "config", "scripts"];
+export const MANAGED_ROOTS = ["src", "tests", "scripts"];
 
 export const FILE_RULES = [
   {
@@ -113,7 +113,7 @@ export const FILE_RULES = [
     good: "guard-staged.mjs, no-duplicate-titles.mjs",
     bad: "GuardStaged.mjs, guard_staged.mjs",
     appliesTo: (p) =>
-      (p.startsWith("config/") || p.startsWith("scripts/")) && p.endsWith(".mjs"),
+      (p.startsWith("src/config/") || p.startsWith("scripts/")) && p.endsWith(".mjs"),
     isValid: (p) => KEBAB_FILE.test(basename(p)),
   },
 ];

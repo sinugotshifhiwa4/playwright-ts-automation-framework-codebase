@@ -21,10 +21,10 @@
     "isolatedModules": true
   },
 
-  // Must stay in sync with FILE_GROUPS.typed in config/eslint/constants.mjs.
+  // Must stay in sync with FILE_GROUPS.typed in src/config/eslint/constants.mjs.
   // A file ESLint type-checks but tsconfig does not include will fail to parse.
-  // config/ and scripts/ are absent on purpose: they are .mjs tooling, linted by
-  // ESLint but never compiled.
+  // src/config/ and scripts/ hold .mjs tooling — linted by ESLint, never compiled.
+  // They fall outside these globs anyway, which only match .ts.
   "include": ["src/**/*.ts", "tests/**/*.ts", "fixtures/**/*.ts", "*.ts"],
 
   "exclude": [

@@ -156,7 +156,7 @@ export const FORBIDDEN_PATHS = [
  * not a loophole — these files contain no test logic and no credentials, and
  * they are the most-reviewed files in the repository by construction.
  */
-export const POLICY_PATHS = [/^config\/quality\//, /^scripts\/quality\//];
+export const POLICY_PATHS = [/^src\/config\/quality\//, /^scripts\/quality\//];
 
 /**
  * Flagged, not blocked, unless SETTINGS.blockTodo is true.

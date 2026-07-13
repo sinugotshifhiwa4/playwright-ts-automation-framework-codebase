@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Enforces the naming conventions declared in config/quality/naming.mjs.
+ * Enforces the naming conventions declared in src/config/quality/naming.mjs.
  *
  * Runs on staged files in pre-commit, and across the whole tree with `--all` in
  * pre-push and CI — the `--all` pass exists because a file can be renamed into
@@ -12,7 +12,11 @@
 
 import { stagedFiles, trackedFiles } from "./lib/git.mjs";
 import { Report, dim } from "./lib/report.mjs";
-import { FILE_RULES, FOLDER_RULE, MANAGED_ROOTS } from "../../config/quality/naming.mjs";
+import {
+  FILE_RULES,
+  FOLDER_RULE,
+  MANAGED_ROOTS,
+} from "../../src/config/quality/naming.mjs";
 
 const scanAll = process.argv.includes("--all");
 const files = scanAll ? trackedFiles() : stagedFiles();

@@ -1,12 +1,12 @@
 import prettier from "eslint-config-prettier";
 
-import base from "./config/eslint/base.mjs";
-import globals from "./config/eslint/globals.mjs";
-import ignores from "./config/eslint/ignores.mjs";
-import imports from "./config/eslint/imports.mjs";
-import playwright from "./config/eslint/playwright.mjs";
-import typescript from "./config/eslint/typescript.mjs";
-import unused from "./config/eslint/unused.mjs";
+import base from "./src/config/eslint/base.mjs";
+import globals from "./src/config/eslint/globals.mjs";
+import ignores from "./src/config/eslint/ignores.mjs";
+import imports from "./src/config/eslint/imports.mjs";
+import playwright from "./src/config/eslint/playwright.mjs";
+import typescript from "./src/config/eslint/typescript.mjs";
+import unused from "./src/config/eslint/unused.mjs";
 
 /**
  * The composition root. This file contains no rules — it only declares the order
@@ -31,7 +31,7 @@ import unused from "./config/eslint/unused.mjs";
  * a rule Prettier owns and the two tools would undo each other's work on every
  * save.
  *
- * To extend: write a new module under config/eslint/, then insert it here at the
+ * To extend: write a new module under src/config/eslint/, then insert it here at the
  * position matching its scope. Do not add rules to this file.
  */
 export default [
