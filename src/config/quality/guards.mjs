@@ -124,6 +124,20 @@ export const SECRET_PATTERNS = [
   },
 ];
 
+/**
+ * The one environment file that may be committed, and where it must live.
+ *
+ * `envs/` is not an arbitrary choice: it is `ENVIRONMENT_CONSTANTS.ROOT` in
+ * src/config/environment/constants/environment.const.ts, and it is the directory
+ * EnvPathResolver resolves `.env.dev`, `.env.qa`, `.env.uat` and `.env.preprod`
+ * against. The template belongs beside the files it is a template for.
+ *
+ * This string duplicates that constant because a .mjs policy file cannot import a
+ * .ts module. If `ROOT` ever changes, change it here too — the guard is the only
+ * thing that would not notice.
+ */
+export const ENV_TEMPLATE = "envs/.env.example";
+
 /** Paths that must never be staged at all, whatever their contents. */
 export const FORBIDDEN_PATHS = [
   {
@@ -135,9 +149,18 @@ export const FORBIDDEN_PATHS = [
   {
     id: "env-file",
     label: "environment file",
-    // .env, .env.local, .env.qa — but .env.example is the documented template.
-    test: (p) => /(?:^|\/)\.env(?:\.|$)/.test(p) && !/\.env\.example$/.test(p),
-    hint: "Commit .env.example with placeholder values instead.",
+    // Two rules in one test, because they are the same rule: a real .env (.env,
+    // .env.local, .env.qa) is never committed, and the template that may be is the
+    // single file at ENV_TEMPLATE.
+    //
+    // The location matters as much as the name. A .env.example at the repository
+    // root passes any check that only looks at the filename, and it is exactly the
+    // failure worth blocking: a second template, in a directory nothing loads,
+    // slowly drifting out of step with the envs/ files it claims to describe. The
+    // one that is wrong is the one a new engineer copies, because it is the one
+    // they see first.
+    test: (p) => /(?:^|\/)\.env(?:\.|$)/.test(p) && p !== ENV_TEMPLATE,
+    hint: `Real env files are never committed. The one template lives at ${ENV_TEMPLATE} — move it there, beside the .env.<stage> files it describes.`,
   },
   {
     id: "playwright-output",
