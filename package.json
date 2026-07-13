@@ -4,7 +4,7 @@
   "description": "End-to-end test automation framework built with Playwright and TypeScript, featuring reusable page objects, shared fixtures, multi-browser execution, and environment-based configuration (dev/qa/prod) for consistent runs locally and in CI.",
   "scripts": {
     "prepare": "husky || true",
-    "validate": "npm run typecheck && npm run lint && npm run format:check && npm run lint:md && npm run verify:rules",
+    "validate": "npm run typecheck && npm run lint && npm run format:check && npm run lint:md && npm run verify:rules && npm run verify:docs",
     "fix": "npm run lint:fix && npm run format",
     "quality": "npm run validate",
     "quality:fix": "npm run fix",
@@ -18,6 +18,7 @@
     "verify:names": "node scripts/quality/validate-filenames.mjs --all",
     "verify:guards": "node scripts/quality/guard-staged.mjs --all",
     "verify:rules": "node scripts/quality/validate-always-apply.mjs --all",
+    "verify:docs": "node scripts/quality/validate-doc-index.mjs --all",
     "test": "playwright test",
     "test:smoke": "playwright test --grep @smoke --pass-with-no-tests",
     "test:headed": "playwright test --headed",

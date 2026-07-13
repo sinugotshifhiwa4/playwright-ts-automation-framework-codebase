@@ -46,14 +46,17 @@ layers see different things.
 graph TD
     subgraph POLICY["Policy — declared once, as data"]
         NAMING["src/config/quality/naming.mjs<br/><i>filename + folder conventions</i>"]
-        GUARDS["src/config/quality/guards.mjs<br/><i>secrets, .only, size limits</i>"]
-        ESLINT_C["src/config/eslint/*.mjs<br/><i>eight single-purpose modules</i>"]
+        GUARDS["src/config/quality/guards.mjs<br/><i>secrets, .only, size limits, alwaysApply</i>"]
+        DOCS["src/config/quality/docs.mjs<br/><i>the documentation index contract</i>"]
+        ESLINT_C["src/config/eslint/*.mjs<br/><i>nine single-purpose modules</i>"]
         CONST["src/config/eslint/constants.mjs<br/><b>FILE_GROUPS</b> — which files, which rules"]
     end
 
     subgraph MECHANISM["⚙️ Mechanism — dumb executors"]
         VF["scripts/quality/validate-filenames.mjs"]
         GS["scripts/quality/guard-staged.mjs"]
+        VA["scripts/quality/validate-always-apply.mjs"]
+        VD["scripts/quality/validate-doc-index.mjs"]
         ESLINT["eslint.config.mjs<br/><i>composition root, zero rules</i>"]
     end
 
@@ -66,15 +69,21 @@ graph TD
 
     NAMING --> VF
     GUARDS --> GS
+    GUARDS --> VA
+    DOCS --> VD
     CONST --> ESLINT_C
     ESLINT_C --> ESLINT
 
     VF --> PC
     GS --> PC
+    VA --> PC
+    VD --> PC
     ESLINT --> IDE
     ESLINT --> PC
     VF --> PP
     GS --> PP
+    VA --> PP
+    VD --> PP
     ESLINT --> PP
     ESLINT --> CI
 
@@ -99,24 +108,32 @@ This is what happens between `git commit` and a commit object existing.
 flowchart TD
     START(["git add .<br/>git commit"]) --> H{{".husky/pre-commit"}}
 
-    H --> S1["<b>1 · Filenames</b><br/>validate-filenames.mjs<br/><i>~50ms</i>"]
-    S1 -->|✗| FAIL1["✖ Rejected<br/>Login.spec.ts, not login.spec.ts"]
+    H --> S1["<b>1 · Filenames</b><br/>validate-filenames.mjs<br/><i>~50ms · staged</i>"]
+    S1 -->|✗| FAIL1["✖ Rejected<br/>loginPage.ts, not LoginPage.ts"]
     S1 -->|✓| S2
 
-    S2["<b>2 · Content guards</b><br/>guard-staged.mjs<br/><i>~100ms</i>"]
-    S2 -->|✗| FAIL2["✖ Rejected<br/>secret · .only · console.log<br/>conflict marker · 500KB file"]
-    S2 -->|✓| S3
-
-    S3["<b>3 · lint-staged</b><br/><i>repairs, not verifies</i>"]
-    S3 --> R1["eslint --fix<br/><i>deletes dead imports, reorders</i>"]
+    S2["<b>2 · lint-staged</b><br/><i>repairs, not verifies</i>"]
+    S2 --> R1["eslint --fix<br/><i>deletes dead imports, reorders</i>"]
     R1 --> R2["prettier --write<br/><i>last word on layout</i>"]
     R2 --> R3["git add<br/><i>re-stages the fixed files</i>"]
-    R3 -->|✗ unfixable| FAIL3["✖ Rejected<br/>a human must decide"]
-    R3 -->|✓| S4
+    R3 -->|✗ unfixable| FAIL2["✖ Rejected<br/>a human must decide"]
+    R3 -->|✓| S3
 
-    S4["<b>4 · TypeScript</b><br/>tsc --noEmit<br/><i>project-wide</i>"]
-    S4 -->|✗| FAIL4["✖ Rejected<br/>your page object broke<br/>a spec you did not touch"]
-    S4 -->|✓| OK(["✔ Commit created"])
+    S3["<b>3 · Content guards</b><br/>guard-staged.mjs<br/><i>reads the index</i>"]
+    S3 -->|✗| FAIL3["✖ Rejected<br/>secret · .only · console.log<br/>conflict marker · 500KB file"]
+    S3 -->|✓| S4
+
+    S4["<b>4 · Always-apply rules</b><br/>validate-always-apply.mjs<br/><i>project-wide</i>"]
+    S4 -->|✗| FAIL4["✖ Rejected<br/>a rule nothing obeys, or a doc<br/>silently governing every session"]
+    S4 -->|✓| S5
+
+    S5["<b>5 · Documentation index</b><br/>validate-doc-index.mjs<br/><i>project-wide</i>"]
+    S5 -->|✗| FAIL5["✖ Rejected<br/>a page nobody can find,<br/>or a dead link in an index"]
+    S5 -->|✓| S6
+
+    S6["<b>6 · TypeScript</b><br/>tsc --noEmit<br/><i>project-wide</i>"]
+    S6 -->|✗| FAIL6["✖ Rejected<br/>your page object broke<br/>a spec you did not touch"]
+    S6 -->|✓| OK(["✔ Commit created"])
 
     style START fill:#1e3a5f,stroke:#4a90d9,color:#fff
     style OK fill:#1f4d3a,stroke:#4caf7d,color:#fff
@@ -124,32 +141,47 @@ flowchart TD
     style FAIL2 fill:#5f1f1f,stroke:#d9534f,color:#fff
     style FAIL3 fill:#5f1f1f,stroke:#d9534f,color:#fff
     style FAIL4 fill:#5f1f1f,stroke:#d9534f,color:#fff
-    style S3 fill:#3d2f5f,stroke:#9b7fd4,color:#fff
+    style FAIL5 fill:#5f1f1f,stroke:#d9534f,color:#fff
+    style FAIL6 fill:#5f1f1f,stroke:#d9534f,color:#fff
+    style S2 fill:#3d2f5f,stroke:#9b7fd4,color:#fff
 ```
 
 ### Why this order
 
-**Cheap-and-fatal before expensive-and-forgiving.** Steps 1 and 2 can only ever
-reject; they cannot fix anything. They cost about 150ms combined. Step 3 costs
-seconds. Running the cheap checks first means a commit containing an AWS key is
-rejected almost instantly rather than after a full lint-and-format pass.
+**Repair before you judge.** `lint-staged` rewrites files and re-stages them, so
+anything running before it is judging bytes that will not be the bytes in the
+commit. The guards read the **Git index** precisely so they can judge the commit —
+which means they have to run after the last thing that rewrites the index. Put them
+first and they inspect a file that lint-staged is about to change.
 
-**Step 3 repairs; it does not judge.** `lint-staged` runs ESLint's `--fix` and
-then Prettier, and re-stages the result — so the commit contains the _corrected_
-file, not the one you wrote. Import order, dead imports and formatting are
-machine-decidable, and no engineer should be asked to fix them by hand. Only what
-a machine genuinely cannot decide is escalated to a rejection.
+Filenames are the exception, and can run first: lint-staged fixes contents, it never
+renames a file, so its result cannot change the answer. It is also the cheapest
+check in the hook, so a badly named file is rejected in ~50ms rather than after a
+full lint-and-format pass.
 
-The order **inside** step 3 matters and is easy to get wrong: ESLint runs first
+**Step 2 repairs; it does not judge.** ESLint's `--fix` and then Prettier, re-staged
+— so the commit contains the _corrected_ file, not the one you wrote. Import order,
+dead imports and formatting are machine-decidable, and no engineer should be asked
+to fix them by hand. Only what a machine genuinely cannot decide is escalated to a
+rejection.
+
+The order **inside** step 2 matters and is easy to get wrong: ESLint runs first
 because `--fix` rewrites code (deleting imports, reordering them), which changes
 formatting. Prettier runs last so it always has the final word on layout. Reverse
 them and every commit leaves badly-formatted code behind.
 
-**Step 4 is the only project-wide check, and it cannot be dropped.** TypeScript
-errors cross file boundaries: editing `LoginPage.ts` can break `Checkout.spec.ts`
-without that spec ever being staged. Types are the one thing lint-staged's
-file-scoped view is structurally incapable of seeing — which is precisely why
-`tsc` is here and full ESLint is not.
+**Steps 4, 5 and 6 are project-wide, and none can be dropped.** Each one judges
+something a staged-scope check is structurally incapable of seeing:
+
+- **Always-apply** compares two files. The edit that breaks it — deleting an
+  `@import` from `CLAUDE.md` — leaves the rule's own file untouched, so a
+  staged-scope check would miss the one case it exists to catch.
+- **Documentation index** has the identical shape. Adding a page and forgetting to
+  list it leaves the index file untouched.
+- **TypeScript** errors cross file boundaries: editing `loginPage.ts` can break
+  `Checkout.spec.ts` without that spec ever being staged. Types are the one thing
+  lint-staged's file-scoped view cannot see — which is precisely why `tsc` is here
+  and full ESLint is not.
 
 ---
 
@@ -463,5 +495,7 @@ or for `eslint-disable` on a Playwright rule. Those are the contract.
 | `npm run quality` / `quality:fix` | Aliases for the two above                                |
 | `npm run verify:names`            | Filename conventions across the whole tree               |
 | `npm run verify:guards`           | Content guards across the whole tree                     |
+| `npm run verify:rules`            | `alwaysApply: true` ⇔ imported by `CLAUDE.md`            |
+| `npm run verify:docs`             | Every page linked from its folder's `README.md`          |
 | `npm test`                        | Playwright                                               |
 | `npm run test:smoke`              | `@smoke`-tagged tests only                               |

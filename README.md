@@ -48,3 +48,21 @@ npm install
 ```powershell
 npx playwright install
 ```
+
+---
+
+## Documentation
+
+All docs live under [`docs/`](docs/README.md). Each section carries its own index.
+
+| Section                                                   | Description                                                       | Applies                                           |
+| --------------------------------------------------------- | ----------------------------------------------------------------- | ------------------------------------------------- |
+| **[01 — Config](docs/01-config/README.md)**               | How the quality tooling fits together and where it is enforced.   | On demand — read before changing configuration.   |
+| **[03 — Rules](docs/03-rules/README.md)**                 | Conduct, task planning, naming, code quality, branching, commits. | **Always.** Loaded every session via `CLAUDE.md`. |
+| [Documentation Guide](docs/DOCUMENTATION_PROMPT_GUIDE.md) | How to write a page: structure, diagrams, definition of done.     | On demand — read before editing `docs/`.          |
+
+The rules in **03 — Rules** are not optional reading. They declare `alwaysApply: true`
+and are imported by `CLAUDE.md`, so they are in force on every request whether or not
+anyone opens them.
+
+---

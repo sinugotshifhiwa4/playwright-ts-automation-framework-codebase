@@ -25,6 +25,10 @@ pre-commit hook rejects a badly named document before it reaches a branch.
 
 - [Why This Guide Exists](#why-this-guide-exists)
 - [The Documentation Workflow](#the-documentation-workflow)
+- [Adding A Page Or A Section](#adding-a-page-or-a-section)
+  - [Adding A Page](#adding-a-page)
+  - [Adding A Section](#adding-a-section)
+  - [README Is An Index, Not A Page](#readme-is-an-index-not-a-page)
 - [Page Structure](#page-structure)
 - [Frontmatter](#frontmatter)
   - [When alwaysApply is true](#when-alwaysapply-is-true)
@@ -85,10 +89,11 @@ flowchart TD
     W2 --> W3["<b>6 · Draw the relationships</b><br/><i>Mermaid, then the<br/>'why it is built this way'</i>"]
     W3 --> W4["<b>7 · Write the prose</b><br/><i>responsibility before detail</i>"]
     W4 --> W5["<b>8 · Ground the examples</b><br/><i>open every path you cite</i>"]
+    W5 --> W6["<b>9 · Index it</b><br/><i>link it from the folder's README<br/>or it cannot be found</i>"]
 
-    W5 --> V{"<b>9 · Definition of Done</b><br/>npm run validate<br/>+ the checklist"}
+    W6 --> V{"<b>10 · Definition of Done</b><br/>npm run validate<br/>+ the checklist"}
     V -->|"any item fails"| W4
-    V -->|"all pass"| REVIEW["<b>10 · Review</b>"]
+    V -->|"all pass"| REVIEW["<b>11 · Review</b>"]
     REVIEW --> DONE(["✔ Published"])
 
     style START fill:#1e3a5f,stroke:#4a90d9,color:#fff
@@ -109,6 +114,99 @@ The two loops back into earlier steps are the load-bearing part. A page that tur
 out to cover two topics goes back to step 2 and gets split, and a page that fails a
 single item of the definition of done goes back to step 7. Neither is a formality
 that can be waived because the page "looks finished".
+
+Step 9 is a step in the workflow rather than an afterthought for a reason: an
+unindexed page is not a finished page. See
+[Adding A Page Or A Section](#adding-a-page-or-a-section).
+
+## Adding A Page Or A Section
+
+**A page that is not linked from its folder's `README.md` does not count as
+written.** This is not a convention — `scripts/quality/validate-doc-index.mjs`
+rejects the commit.
+
+The reason is worth being blunt about. An index is the one part of a documentation
+tree that cannot be checked by reading it: a stale index does not _look_ stale, it
+looks like a complete list. So a page missing from the index reads as a page that
+does not exist, and the reader never goes looking for it. The page is written,
+reviewed, merged — and invisible. Every other kind of documentation rot announces
+itself eventually. This one never does.
+
+```mermaid
+flowchart TD
+    NEW(["A new page is needed"]) --> WHERE{"Does the right<br/>section exist?"}
+
+    WHERE -->|"yes"| P1["<b>1 · Write the page</b><br/><i>UPPERCASE_NAME.md</i><br/>in the section folder"]
+    WHERE -->|"no"| S1["<b>1 · Create the folder</b><br/><i>NN-lowercase-name/</i>"]
+
+    S1 --> S2["<b>2 · Write its README.md</b><br/><i>the section index</i>"]
+    S2 --> S3["<b>3 · Link it from docs/README.md</b><br/><i>and the root README table</i>"]
+    S3 --> P1
+
+    P1 --> P2["<b>2 · Link it from that folder's<br/>README.md</b>"]
+    P2 --> CHECK{"<b>npm run verify:docs</b>"}
+
+    CHECK -->|"✗ not linked"| FAIL["✖ Commit rejected<br/><i>a page nobody can find</i>"]
+    CHECK -->|"✗ dead link"| FAIL
+    FAIL --> P2
+    CHECK -->|"✓"| DONE(["✔ The page exists,<br/>and can be found"])
+
+    style NEW fill:#1e3a5f,stroke:#4a90d9,color:#fff
+    style DONE fill:#1f4d3a,stroke:#4caf7d,color:#fff
+    style CHECK fill:#5f1f1f,stroke:#d9534f,color:#fff
+    style WHERE fill:#5f1f1f,stroke:#d9534f,color:#fff
+    style FAIL fill:#5f1f1f,stroke:#d9534f,color:#fff
+```
+
+**Why it is built this way.** Linking the page is a step in _writing_ the page, not
+a chore that follows it. The gate sits before the commit exists, so the cost of
+forgetting is thirty seconds — not a page that quietly goes unread for a year.
+
+### Adding A Page
+
+1. Write it in the right section folder, named `UPPERCASE_WITH_UNDERSCORES.md` (see
+   [CONVENTIONS.md](03-rules/CONVENTIONS.md)).
+2. **Add a link to it in that folder's `README.md`**, with a one-line description of
+   what it covers. Not the page's title restated — what a reader would open it for.
+3. Run `npm run verify:docs`.
+
+If it is a standing rule (`alwaysApply: true`), it must _also_ be `@import`ed by
+`CLAUDE.md`, or `npm run verify:rules` rejects it. Two separate gates; both apply.
+
+### Adding A Section
+
+A section is a numbered folder under `docs/`. Create one when a topic has enough
+pages that they need an index of their own — not in advance, on the theory that they
+might.
+
+1. Create the folder: `NN-lowercase-name/` — numbered so the sections read in order,
+   lowercase and hyphenated like every other folder in the repository.
+2. Write its **`README.md`**: a short statement of what the section covers, and a
+   table linking every page in it.
+3. **Link that `README.md` from [docs/README.md](README.md)**, and add a row to the
+   Documentation table in the root `README.md`.
+4. Run `npm run verify:docs`.
+
+An empty folder is not a section. Git does not track empty directories, so
+`docs/07-tests/` with nothing in it does not exist for anyone who clones the
+repository — which is why the validator ignores it until a page lands there, and why
+scaffolding a tree of empty section folders achieves nothing.
+
+### README Is An Index, Not A Page
+
+**None of the page rules in this guide apply to a `README.md`.** No frontmatter, no
+table of contents, no `alwaysApply`, no Practical Outcome section.
+
+A `README.md` exists to be the thing GitHub renders when someone browses into the
+folder. It answers one question — _what is in here, and which of it do I want_ — and
+the fastest way to ruin it is to make it look like a page.
+
+What it must contain:
+
+- a back link to the index above it
+- one or two sentences on what the section is for
+- a table linking **every** page in the folder, each with a one-line description
+- a link to the `README.md` of every subfolder that holds pages
 
 ## Page Structure
 
@@ -407,6 +505,8 @@ that AI-drafted documentation reliably produces.
 - keep every example consistent with the current repository
 - draw every relationship as a Mermaid diagram, and explain the reasoning under it
 - state plainly when an area is planned rather than built
+- **link every new page from its folder's `README.md`** — a page that is not indexed
+  is not finished, and the commit will be rejected
 
 **Never:**
 
@@ -487,6 +587,9 @@ Rules:
 - Do not add a diagram to a page that documents one file in isolation.
 - Never cite a path you have not opened. If an area is planned rather than built, say so.
 - Name the file in UPPERCASE_WITH_UNDERSCORES.md. A page documenting a skill is NAME_SKILL.md.
+- Link the finished page from its folder's README.md. If the section does not exist yet,
+  create the folder, write its README.md, and link that from docs/README.md and the root
+  README table. An unindexed page fails npm run verify:docs.
 - End with a Practical Outcome section.
 
 Before finishing, check the page against the Definition Of Done in the guide.
@@ -525,6 +628,7 @@ item goes back to step 7 of the workflow.
 - `npm run format:check` passes — Prettier is satisfied
 - `npm run verify:names` passes — the filename matches the enforced pattern
 - `npm run verify:rules` passes — `alwaysApply` and `CLAUDE.md` agree
+- `npm run verify:docs` passes — the page is linked from its folder's `README.md`
 
 **Checked by you:**
 
@@ -533,6 +637,7 @@ item goes back to step 7 of the workflow.
 - ✓ The back link resolves from this page's actual depth
 - ✓ Every heading appears in the Table of Contents, at the right level
 - ✓ Every heading says what is under it
+- ✓ **The page is linked from its folder's `README.md`**, with a one-line description
 - ✓ **Every file path in the page has been opened and exists**
 - ✓ Every example reflects the repository as it is today, not as it is planned
 - ✓ Every relationship the page describes is drawn as a Mermaid diagram
