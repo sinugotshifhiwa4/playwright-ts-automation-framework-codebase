@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+
+    "lib": ["ES2022", "dom"],
+
+    "strict": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+
+    "types": ["node", "@playwright/test"],
+
+    "noEmit": true,
+    "sourceMap": true,
+    "isolatedModules": true
+  },
+
+  // Must stay in sync with FILE_GROUPS.typed in config/eslint/constants.mjs.
+  // A file ESLint type-checks but tsconfig does not include will fail to parse.
+  // config/ and scripts/ are absent on purpose: they are .mjs tooling, linted by
+  // ESLint but never compiled.
+  "include": ["src/**/*.ts", "tests/**/*.ts", "fixtures/**/*.ts", "*.ts"],
+
+  "exclude": [
+    "node_modules",
+    "dist",
+    "logs",
+    "downloads",
+    "playwright-report",
+    "test-results"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
+  "version": "0.2",
+  "language": "en,en-GB",
+  "useGitignore": true,
+  "ignorePaths": [
+    "node_modules/**",
+    "package-lock.json",
+    "playwright-report/**",
+    "test-results/**",
+    "CLAUDE.md"
+  ],
+  "words": [
+    "abopsr",
+    "ACMR",
+    "AKIA",
+    "bxox",
+    "cspell",
+    "dotenv",
+    "faker",
+    "husky",
+    "interactability",
+    "luxon",
+    "markdownlint",
+    "networkidle",
+    "ortoni",
+    "playwright",
+    "pousr",
+    "quasis",
+    "Tunables",
+    "tsconfig",
+    "tseslint",
+    "typecheck",
+    "unawaited",
+    "unlinted",
+    "viewports",
+    "webkit",
+    "winston"
+  ]
+}

@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+
+# Playwright output
+/test-results/
+/playwright-report/
+/blob-report/
+/blob-report-*/
+/all-blob-reports/
+/ortoni-report/
+/playwright/.cache/
+/playwright/.auth/
+/.auth/
+
+# Build + runtime artefacts
+/dist/
+/logs/
+/downloads/
+
+# Environment configuration
+# .env holds real credentials and is never committed; .env.example is the
+# checked-in template of key names with placeholder values.
+.env*
+!.env.example

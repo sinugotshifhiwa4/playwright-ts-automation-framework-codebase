@@ -1,0 +1,38 @@
+#!/usr/bin/env sh
+#
+# The commit gate. Fast, staged-scope checks only — anything project-wide that
+# takes real time belongs in pre-push, because a slow pre-commit is a hook people
+# learn to bypass with --no-verify.
+#
+# Order is deliberate, and the repair step comes before the verification steps.
+# lint-staged rewrites files and re-stages them, so anything that runs before it
+# is judging bytes that will not be the bytes in the commit. The guards read the
+# index precisely so they can judge the commit, so they have to run after the
+# last thing that rewrites the index.
+#
+# Filenames are the exception, and can run first: lint-staged fixes contents, it
+# never renames a file, so its result cannot change the answer.
+#
+# Step 4 is the one project-wide check that cannot be skipped: TypeScript errors
+# cross file boundaries, so editing a page object can break a spec that is not
+# staged. Types are the only thing lint-staged's file-scoped view cannot see.
+set -e
+
+echo "▸ 1/4  Filename conventions"
+node scripts/quality/validate-filenames.mjs
+
+echo "▸ 2/4  lint-staged  (eslint --fix → prettier --write → re-stage)"
+npx lint-staged
+
+echo "▸ 3/4  Content guards (secrets, .only, console.log, conflicts, file size)"
+node scripts/quality/guard-staged.mjs
+
+# Unlike every check above it, this one reads the working tree rather than the
+# index — a true index-scoped typecheck would need the whole project checked out
+# to a temp directory, which costs more than it is worth on every commit. The
+# gap is real: with `git add -p`, unstaged code can make a partially-staged
+# commit typecheck clean here and still break CI. pre-push closes it.
+echo "▸ 4/4  TypeScript (project-wide, working tree)"
+npx tsc --noEmit
+
+echo "✔ pre-commit passed"
