@@ -270,16 +270,16 @@ their policy from `src/config/quality/`, and they are the subject of
 The map is complete. The prose behind it is not, and the gap should be visible rather
 than implied:
 
-| Layer                 | Page                                                                                                                                                              |
-| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0 · Foundation        | [LOGGING.md](foundation/LOGGING.md), [SANITIZATION.md](foundation/SANITIZATION.md)                                                                                |
-| 1 · Error handling    | [ERROR_HANDLING.md](foundation/ERROR_HANDLING.md)                                                                                                                 |
-| 2 · I/O and helpers   | [FILE_MANAGERS.md](utilities/FILE_MANAGERS.md) · [SHARED_UTILS.md](utilities/SHARED_UTILS.md)                                                                     |
-| 3 · Paths             | [PATH_RESOLVERS.md](utilities/PATH_RESOLVERS.md)                                                                                                                  |
-| 4 · Environment       | [ENVIRONMENT_LOADING.md](environment/LOADING.md) · [ENVIRONMENT_RESOLUTION.md](environment/RESOLUTION.md) · [ENVIRONMENT_VARIABLES.md](environment/VARIABLES.md)  |
-| 4 · Auth storage      | [AUTHENTICATION_STORAGE.md](execution/AUTHENTICATION_STORAGE.md)                                                                                                  |
-| 5 · Playwright wiring | [PLAYWRIGHT_PROJECTS.md](execution/PLAYWRIGHT_PROJECTS.md) · [WORKER_ALLOCATION.md](execution/WORKER_ALLOCATION.md). `timeouts/` and `reports/`: not written yet. |
-| 6 · UI layer          | [04-layers/ui/](../04-layers/ui/README.md) — a section of its own                                                                                                 |
+| Layer                 | Page                                                                                                                                                                                                |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0 · Foundation        | [LOGGING.md](foundation/LOGGING.md), [SANITIZATION.md](foundation/SANITIZATION.md)                                                                                                                  |
+| 1 · Error handling    | [ERROR_HANDLING.md](foundation/ERROR_HANDLING.md)                                                                                                                                                   |
+| 2 · I/O and helpers   | [FILE_MANAGERS.md](utilities/FILE_MANAGERS.md) · [SHARED_UTILS.md](utilities/SHARED_UTILS.md)                                                                                                       |
+| 3 · Paths             | [PATH_RESOLVERS.md](utilities/PATH_RESOLVERS.md)                                                                                                                                                    |
+| 4 · Environment       | [ENVIRONMENT_LOADING.md](environment/LOADING.md) · [ENVIRONMENT_RESOLUTION.md](environment/RESOLUTION.md) · [ENVIRONMENT_VARIABLES.md](environment/VARIABLES.md)                                    |
+| 4 · Auth storage      | [AUTHENTICATION_STORAGE.md](execution/AUTHENTICATION_STORAGE.md)                                                                                                                                    |
+| 5 · Playwright wiring | [PLAYWRIGHT_PROJECTS.md](execution/PLAYWRIGHT_PROJECTS.md) · [WORKER_ALLOCATION.md](execution/WORKER_ALLOCATION.md) · [TIMEOUTS.md](execution/TIMEOUTS.md) · [REPORTING.md](execution/REPORTING.md) |
+| 6 · UI layer          | [04-layers/ui/](../04-layers/ui/README.md) — a section of its own                                                                                                                                   |
 
 For the layers with no page, **this map is all that is claimed**: the modules are named
 and their edges are drawn, because both come from the import statements. Nothing on this

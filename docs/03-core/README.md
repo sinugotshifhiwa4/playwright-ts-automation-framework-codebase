@@ -22,9 +22,14 @@ bottom to top: each can be read without a forward reference to the next.
 
 ## Scope, Honestly
 
-**Not covered:** the timeouts (`src/config/timeouts/`), the Ortoni report config
-(`src/config/reports/`), and the `scripts/` tooling.
+**Every module in `src/config/` and `src/utils/` now has a page.** The four groups above cover
+the lot.
 
-`ARCHITECTURE.md` is the exception — it maps **every** module, including those, because the
-import statements it is drawn from are already there to be read. But for a module with no page,
-the map names it and draws its edges and claims nothing more than that.
+What is documented is the code, not its use: `tests/` is still empty, so nothing here has been
+exercised by a real spec. Where a module is built but nobody calls it yet — six of the ten UI
+timeouts, the parsing suite, the placeholder guard — the page covering it says so rather than
+implying a caller that does not exist.
+
+The `scripts/` tooling is the one thing outside this section that `ARCHITECTURE.md` maps but no
+page describes in full, beyond the report commands covered in
+[execution/REPORTING.md](execution/REPORTING.md).

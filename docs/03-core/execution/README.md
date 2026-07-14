@@ -10,6 +10,8 @@ machine it may use, and the signed-in session every test inherits.
 | [PLAYWRIGHT_PROJECTS.md](PLAYWRIGHT_PROJECTS.md)       | `src/config/projects/` and `src/config/flags/`: the setup project the browsers depend on, the Chromium-only launch flags, and the flag that empties them all. |
 | [WORKER_ALLOCATION.md](WORKER_ALLOCATION.md)           | `src/config/runtime/workers/`: a percentage of the cores locally, a fair split of them per shard in CI.                                                       |
 | [AUTHENTICATION_STORAGE.md](AUTHENTICATION_STORAGE.md) | `src/config/authentication/`: the `.auth` state file — where it lives, why it is emptied before every run, and one copy per shard.                            |
+| [TIMEOUTS.md](TIMEOUTS.md)                             | `src/config/timeouts/`: every wait the framework performs, named in one place and doubled automatically in CI.                                                |
+| [REPORTING.md](REPORTING.md)                           | `src/config/reports/` and `scripts/reports/`: which reporters run where, and the two commands that serve and reclaim the report server.                       |
 
 ## Why Auth Storage Is Filed Here
 
