@@ -26,5 +26,5 @@ initialization for both. What is missing is the code and the tests, not the plum
 When a layer is built, it gets a folder here beside `ui/`.
 
 For where these layers sit in the dependency graph — and what they are permitted to
-import — see [ARCHITECTURE.md](../03-core/ARCHITECTURE.md). The UI layer is Layer 6,
+import — see [DEPENDENCY_MAP.md](../03-core/DEPENDENCY_MAP.md). The UI layer is Layer 6,
 the top of the stack.

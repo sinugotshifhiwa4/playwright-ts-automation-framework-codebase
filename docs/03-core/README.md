@@ -7,9 +7,9 @@ section knows that a test exists.**
 
 That is the line between this section and [04-layers/](../04-layers/README.md). A page object
 calls the layers; the layers call this. The dependency points one way and never back, which is
-what [ARCHITECTURE.md](ARCHITECTURE.md) exists to show.
+what [DEPENDENCY_MAP.md](DEPENDENCY_MAP.md) exists to show.
 
-**Start with [ARCHITECTURE.md](ARCHITECTURE.md).** It maps the whole of `src/` — which module
+**Start with [DEPENDENCY_MAP.md](DEPENDENCY_MAP.md).** It maps the whole of `src/` — which module
 imports which, and the layers that fall out of that. The four groups below are those layers,
 bottom to top: each can be read without a forward reference to the next.
 
@@ -30,6 +30,6 @@ exercised by a real spec. Where a module is built but nobody calls it yet — si
 timeouts, the parsing suite, the placeholder guard — the page covering it says so rather than
 implying a caller that does not exist.
 
-The `scripts/` tooling is the one thing outside this section that `ARCHITECTURE.md` maps but no
+The `scripts/` tooling is the one thing outside this section that `DEPENDENCY_MAP.md` maps but no
 page describes in full, beyond the report commands covered in
 [execution/REPORTING.md](execution/REPORTING.md).

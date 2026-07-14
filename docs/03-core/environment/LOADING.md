@@ -84,8 +84,11 @@ flowchart TD
     CI -->|"true — CI injects<br/>its own variables"| SKIP["✖ no .env file is read"]
     CI -->|"false — a local run"| INIT["EnvironmentFileManager<br/>.getInstance().initialize()"]
 
-    INIT --> STAGE["getCurrentEnvironmentStage()<br/><i>process.env.ENV ?? NODE_ENV ?? 'dev'</i>"]
-    STAGE --> PATH["EnvPathResolver.getEnvironmentStages()<br/><i>envs/.env.qa</i>"]
+    INIT --> STAGE{"getCurrentEnvironmentStage()<br/><i>ENV, lower-cased</i>"}
+
+    STAGE -->|"ENV names no known stage"| THROW["✖ throws<br/><i>'Invalid ENV: devv. Valid stages are: …'</i><br/>the run stops here"]
+    STAGE -->|"a known stage, or ENV unset → dev"| PATH["EnvPathResolver.getEnvironmentStages()<br/><i>envs/.env.qa</i>"]
+
     PATH --> EXISTS{"file exists?"}
 
     EXISTS -->|"no"| WARN["⚠ logger.warn — the run continues"]
@@ -99,6 +102,8 @@ flowchart TD
     style ENV fill:#5f4a1f,stroke:#d9a441,color:#fff
     style TESTS fill:#1f4d3a,stroke:#4caf7d,color:#fff
     style CI fill:#5f1f1f,stroke:#d9534f,color:#fff
+    style STAGE fill:#5f1f1f,stroke:#d9534f,color:#fff
+    style THROW fill:#5f1f1f,stroke:#d9534f,color:#fff
     style SKIP fill:#3d2f5f,stroke:#9b7fd4,color:#fff
     style WARN fill:#5f4a1f,stroke:#d9a441,color:#fff
 ```

@@ -98,7 +98,7 @@ contract, which is exactly what the folder name is there to discourage.
 
 Note the two edges arriving from **Layer 0**. This module is the first thing in the
 framework that composes anything: it is where the logger and the sanitizer, which know
-nothing about each other, are finally put together. [ARCHITECTURE.md](../ARCHITECTURE.md)
+nothing about each other, are finally put together. [DEPENDENCY_MAP.md](../DEPENDENCY_MAP.md)
 places it in the wider graph.
 
 ## The Capture Path

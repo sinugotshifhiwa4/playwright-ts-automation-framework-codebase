@@ -32,14 +32,14 @@ validates them on the way out.
 
 ## EnvironmentDetector
 
-Four static methods, no state, and the only module in `src/` that is allowed to have an
-opinion about where the process is running.
+Static methods, no state, and the only module in `src/` that is allowed to have an opinion
+about where the process is running.
 
-| Method                               | Answers                                                                                                                                            |
-| ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `isCI()`                             | Is this a pipeline? Checks `CI` **and** the vendor variables for GitHub, GitLab, Travis, CircleCI, Jenkins, and Bitbucket.                         |
-| `getCurrentEnvironmentStage()`       | Which stage? `process.env.ENV`, then `NODE_ENV`, then `"dev"` — validated against the four stages, falling back to `dev` if it is not one of them. |
-| `isQA()` / `isUAT()` / `isPreprod()` | Convenience wrappers over the above.                                                                                                               |
+| Method                                           | Answers                                                                                                                                                    |
+| ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `isCI()`                                         | Is this a pipeline? Checks `CI` **and** the vendor variables for GitHub, GitLab, Travis, CircleCI, Jenkins, and Bitbucket.                                 |
+| `getCurrentEnvironmentStage()`                   | Which stage? `ENV`, **lower-cased** and validated — **throws** if it names no known stage. Falls back to `NODE_ENV`, then `dev`, only when `ENV` is unset. |
+| `isDev()` / `isQA()` / `isUAT()` / `isPreprod()` | Convenience wrappers over the above.                                                                                                                       |
 
 **Why `isCI` checks seven variables and not one.** `CI` is a convention, not a standard,
 and not every runner sets it. A detector that returned `false` on a runner that only sets
@@ -48,11 +48,38 @@ for a `.env` file that is not committed, find nothing, and fail with a message a
 missing file rather than a missing pipeline variable. The list is long because the cost of a
 false negative is a confusing failure in the one place nobody can attach a debugger.
 
-`getCurrentEnvironmentStage()` never throws
-([environmentDetector.ts:25-28](../../../src/config/environment/resolution/detector/environmentDetector.ts#L25-L28)).
-An unrecognised `ENV` silently becomes `dev` rather than failing the run. That is a
-deliberate leniency at _detection_ time — the strictness lives at _read_ time, where a
-variable that is actually needed and actually missing is rejected by name.
+**Why case is forgiven but a typo is not.** The two look like the same mistake and they are
+not.
+
+`ENV=QA` is unambiguous. Nobody who types it means anything other than `qa`, so the value is
+trimmed and lower-cased before it is validated and case never changes which environment a run
+targets.
+
+`ENV=devv` is a **typo**, and it is rejected
+([environmentDetector.ts:39-46](../../../src/config/environment/resolution/detector/environmentDetector.ts#L39-L46)):
+
+```text
+Invalid ENV: "devv". Valid stages are: dev, qa, uat, preprod.
+```
+
+Falling back to `dev` there would be the worst available outcome. If an `envs/.env.dev` happens
+to exist, the run would **pass — against the wrong environment** — and nothing would say so. A
+green suite that tested somewhere you did not ask for is not a weaker signal than a red one; it
+is a false one. So the run stops, at `globalSetup`, before a browser opens.
+
+**`NODE_ENV` is treated leniently, and deliberately so.** It is consulted only when `ENV` is
+unset, and an unrecognised value there is ignored rather than fatal — because `NODE_ENV` is not
+yours. Tooling sets it to `development`, `test` or `production` for reasons that have nothing
+to do with this framework, and a suite that refused to start on any machine with
+`NODE_ENV=development` exported would be failing on someone else's variable.
+
+| Set                                 | Result                     |
+| ----------------------------------- | -------------------------- |
+| `ENV=QA`                            | `qa` — case is normalised  |
+| `ENV=devv`                          | **Throws.** The run stops. |
+| `ENV` unset, `NODE_ENV=qa`          | `qa`                       |
+| `ENV` unset, `NODE_ENV=development` | `dev` — ignored, not fatal |
+| Neither set                         | `dev`                      |
 
 ## The Two Sources
 

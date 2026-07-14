@@ -1,15 +1,20 @@
 ---
-name: framework-architecture
+name: dependency-map
 description: The dependency map of src/ — which module may import which, the layers that fall out of that, and the two entry points that pull the whole graph into a test run.
 alwaysApply: false
 ---
 
-# Architecture
+# Dependency Map
 
 **[← Back to Main Documentation](../../README.md)**
 
 This page is the map of `src/`. It shows which module imports which, the layers that
 fall out of those imports, and where the graph is entered when a test actually runs.
+
+For the whole framework — the runtime flow through the config, the fixtures, the specs and the
+scripts, and which page documents which folder — see
+[ARCHITECTURE.md](../ARCHITECTURE.md). This page is narrower: it is the **import graph of
+`src/`**, and nothing else.
 
 It exists because the dependency structure is the one thing you cannot see from the
 directory listing. `src/config/` and `src/utils/` and `src/layers/` look like three

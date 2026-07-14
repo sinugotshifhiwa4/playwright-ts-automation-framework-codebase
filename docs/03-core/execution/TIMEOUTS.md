@@ -87,7 +87,7 @@ worth knowing about before you debug a mysteriously flaky pipeline.
 | `ui.timeouts.ts`     | `UI_TIMEOUTS` — ten named waits for element interactions.      | The UI action layer    |
 
 Both import `calculateTimeout` and nothing else. Neither imports anything from `src/`, which
-is why [ARCHITECTURE.md](../ARCHITECTURE.md#the-layers) notes they could sit at Layer 0 — they
+is why [DEPENDENCY_MAP.md](../DEPENDENCY_MAP.md#the-layers) notes they could sit at Layer 0 — they
 are filed at Layer 5 because that is where they are _used_.
 
 ## Global Timeouts

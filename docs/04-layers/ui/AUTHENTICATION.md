@@ -112,7 +112,7 @@ toolkit off its surface is what stops that boundary eroding one convenient metho
 Note also that `EnvironmentResolver` arrives as a **constructor argument**, not an import
 ([loginCoordinator.ts:31](../../../src/layers/ui/authentication/loginCoordinator.ts#L31)). The
 UI layer sits above the environment layer, so the dependency is inverted rather than reached
-for — see [ARCHITECTURE.md](../../03-core/ARCHITECTURE.md).
+for — see [DEPENDENCY_MAP.md](../../03-core/DEPENDENCY_MAP.md).
 
 ### Why The Private Helper Is Told Its Caller
 

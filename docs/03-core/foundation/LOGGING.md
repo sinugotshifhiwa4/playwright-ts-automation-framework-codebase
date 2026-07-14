@@ -140,18 +140,24 @@ the person reading it rather than the CI runner's UTC.
 
 The files always get everything. The **console** does not:
 
-| `ENV`     | Console level | What you see while the suite runs    |
-| --------- | ------------- | ------------------------------------ |
-| `dev`     | `debug`       | Everything.                          |
-| `qa`      | `debug`       | Everything.                          |
-| `uat`     | `info`        | Progress, warnings, errors.          |
-| `preprod` | `warn`        | Warnings and errors only.            |
-| unset     | `debug`       | Everything — `ENV` defaults to `qa`. |
+| `ENV`             | Console level | What you see while the suite runs      |
+| ----------------- | ------------- | -------------------------------------- |
+| `dev`             | `debug`       | Everything.                            |
+| `qa`              | `debug`       | Everything.                            |
+| `uat`             | `info`        | Progress, warnings, errors.            |
+| `preprod`         | `warn`        | Warnings and errors only.              |
+| unset, or unknown | `debug`       | Everything — the level map falls back. |
 
 That mapping is `getConsoleLogLevel` at
-[loggerFactory.ts:233-242](../../../src/config/logger/internal/loggerFactory.ts#L233-L242), and the
-environment is read straight from `process.env.ENV` at
-[loggerFactory.ts:165](../../../src/config/logger/internal/loggerFactory.ts#L165).
+[loggerFactory.ts:233-242](../../../src/config/logger/internal/loggerFactory.ts#L233-L242).
+
+The environment is read straight from `process.env.ENV` — **not** through
+`EnvironmentDetector` — and lower-cased here, so `ENV=QA` sets the same console level as
+`ENV=qa`. That duplication is deliberate: the detector reaches the file managers, which log, so
+importing it would close a cycle straight back into this factory. It is the same reason the
+logger's only repository import is a **type**, and
+[Why The Logger Imports Almost Nothing](#why-the-logger-imports-almost-nothing) is the longer
+version of the argument.
 
 **Why it is built this way.** The console is for the human watching the run and the
 files are for the person investigating afterwards, and those two readers want opposite

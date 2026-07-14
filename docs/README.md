@@ -5,13 +5,19 @@
 All framework documentation lives here. Sections are numbered so they read in a
 sensible order, and each one carries its own index.
 
-| Section                                                        | What it covers                                                             | Applies                                              |
-| -------------------------------------------------------------- | -------------------------------------------------------------------------- | ---------------------------------------------------- |
-| **[01 — Rules](01-rules/README.md)**                           | Conduct, task planning, naming, code quality, branching, commits.          | **Always.** Loaded every session via `CLAUDE.md`.    |
-| **[02 — Tooling](02-tooling/README.md)**                       | The quality gates — ESLint, Husky, the validators — and the agent setup.   | On demand — read before changing the tooling.        |
-| **[03 — Core](03-core/README.md)**                             | `src/config/` + `src/utils/` — the machinery the layers are built on.      | On demand — read when working in the area.           |
-| **[04 — Layers](04-layers/README.md)**                         | `src/layers/` — the UI layer: page actions, browser context, login flow.   | On demand — read when writing a test or page object. |
-| [DOCUMENTATION_PROMPT_GUIDE.md](DOCUMENTATION_PROMPT_GUIDE.md) | How to write a page here: structure, diagrams, and the definition of done. | On demand — read before adding or editing a page.    |
+**New here? Start with [ARCHITECTURE.md](ARCHITECTURE.md).** It is the only page that shows the
+whole framework at once — what happens end to end when a test runs, and which page documents
+which folder. Everything else is deliberately narrow.
+
+| Section                                                        | What it covers                                                              | Applies                                              |
+| -------------------------------------------------------------- | --------------------------------------------------------------------------- | ---------------------------------------------------- |
+| [ARCHITECTURE.md](ARCHITECTURE.md)                             | The whole framework: the runtime flow, and where each folder is documented. | On demand — read first, then follow the links.       |
+| **[01 — Rules](01-rules/README.md)**                           | Conduct, task planning, naming, code quality, branching, commits.           | **Always.** Loaded every session via `CLAUDE.md`.    |
+| **[02 — Tooling](02-tooling/README.md)**                       | The quality gates — ESLint, Husky, the validators — and the agent setup.    | On demand — read before changing the tooling.        |
+| **[03 — Core](03-core/README.md)**                             | `src/config/` + `src/utils/` — the machinery the layers are built on.       | On demand — read when working in the area.           |
+| **[04 — Layers](04-layers/README.md)**                         | `src/layers/` — the UI layer: page actions, browser context, login flow.    | On demand — read when writing a test or page object. |
+| **[05 — Commands](05-commands/README.md)**                     | What to type: the test and quality commands, and every runtime flag.        | On demand — read before running the suite.           |
+| [DOCUMENTATION_PROMPT_GUIDE.md](DOCUMENTATION_PROMPT_GUIDE.md) | How to write a page here: structure, diagrams, and the definition of done.  | On demand — read before adding or editing a page.    |
 
 ## The Two Kinds Of Page
 
