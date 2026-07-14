@@ -15,7 +15,7 @@ The goal is to keep the user in control of what gets committed and when. Claude 
 ## Table of Contents
 
 - [The Workflow](#the-workflow)
-  - [Step 0: Run the Lint Check](#step-0-run-the-lint-check)
+  - [Step 0: Run Validation](#step-0-run-validation)
   - [Step 1: Present Changes for Review](#step-1-present-changes-for-review)
   - [Step 2: Wait for User Approval](#step-2-wait-for-user-approval)
   - [Step 3: Draft the Commit Message](#step-3-draft-the-commit-message)
@@ -31,7 +31,7 @@ because the whole point of the workflow is that Claude stops at them:
 
 ```mermaid
 flowchart TD
-    CHANGE(["Code change complete"]) --> S0["<b>0 · Lint check</b><br/>npm run lint:check"]
+    CHANGE(["Code change complete"]) --> S0["<b>0 · Validate</b><br/>npm run validate"]
     S0 -->|"errors from this change"| FIX["Fix and re-run"]
     FIX --> S0
     S0 -->|"pre-existing errors elsewhere"| NOTE["Leave them<br/><i>note them in the summary</i>"]
@@ -57,15 +57,19 @@ flowchart TD
 
 The Jira ticket is asked for last, after approval, for the same reason: it is bookkeeping about a change that has already been agreed, and asking earlier invites the user to approve the ticket rather than the code.
 
-### Step 0: Run the Lint Check
+### Step 0: Run Validation
 
-Before presenting any changes to the user, run `npm run lint:check`.
+Before presenting any changes to the user, run `npm run validate`.
+
+It composes every check the repository has — `typecheck`, `lint`, `format:check`,
+`lint:md`, `verify:rules`, and `verify:docs` — so it is the same gate CI runs, under
+a different name. `npm run quality` and `npm run ci` are aliases of it.
 
 - If the check passes, proceed to Step 1.
 - If errors are found that were introduced by the current change, fix them first and re-run.
 - If errors exist in unrelated modules or classes, do **not** fix them. Proceed to Step 1 and include a note:
 
-  > "All requested changes passed the lint check. The remaining issues are pre-existing in `<ClassName>` / `<module>` and were not introduced by this change."
+  > "All requested changes passed validation. The remaining issues are pre-existing in `<ClassName>` / `<module>` and were not introduced by this change."
 
 ### Step 1: Present Changes for Review
 
@@ -111,7 +115,7 @@ Only after Steps 2, 3, and 4 are complete, create the commit.
 
 ## Rules
 
-- Always run `npm run lint:check` after every change, before presenting results to the user.
+- Always run `npm run validate` after every change, before presenting results to the user.
 - Never commit immediately after making changes, even if the change is small or obvious.
 - Never skip the review step because the change looks straightforward.
 - Never stage and commit in the same action without presenting a summary first.

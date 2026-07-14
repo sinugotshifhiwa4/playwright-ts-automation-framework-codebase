@@ -27,9 +27,9 @@
     "report": "npx playwright show-report --host 127.0.0.1 --port 0",
     "ortoni-report": "tsx scripts/reports/show-ortoni-report.ts",
     "ortoni-report:stop": "tsx scripts/reports/stop-ortoni-report.ts",
-    "pretest:ui": "npm run lint:check",
-    "pretest:api": "npm run lint:check",
-    "pretest:db": "npm run lint:check",
+    "pretest:ui": "npm run validate",
+    "pretest:api": "npm run validate",
+    "pretest:db": "npm run validate",
     "test:ui": "cross-env TEST_LAYER=ui tsx scripts/execution/test-executor.ts",
     "test:api": "cross-env TEST_LAYER=api tsx scripts/execution/test-executor.ts",
     "test:db": "cross-env TEST_LAYER=db tsx scripts/execution/test-executor.ts"

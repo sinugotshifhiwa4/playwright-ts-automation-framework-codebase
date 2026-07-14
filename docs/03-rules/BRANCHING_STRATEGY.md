@@ -180,7 +180,7 @@ The six stages below, and what happens when a stage rejects the work:
 
 ```mermaid
 flowchart TD
-    START(["Create branch from develop"]) --> DEV["<b>1 · Development</b><br/>build + local validation<br/><i>npm run lint:check</i>"]
+    START(["Create branch from develop"]) --> DEV["<b>1 · Development</b><br/>build + local validation<br/><i>npm run validate</i>"]
     DEV --> MR{"<b>Code review</b><br/>merge request"}
     MR -->|"changes requested"| DEV
     MR -->|"approved"| INT["<b>2 · Integration</b><br/>merge into develop<br/><i>first shared checkpoint</i>"]
@@ -213,7 +213,7 @@ flowchart TD
 
 Local validation for automation work typically includes:
 
-- `npm run lint:check`
+- `npm run validate`
 - targeted Playwright execution for the affected area
 - authentication setup if the scenario requires it
 
