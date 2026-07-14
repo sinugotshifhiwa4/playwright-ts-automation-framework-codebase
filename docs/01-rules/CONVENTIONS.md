@@ -21,7 +21,7 @@ Two rules carry almost all of it:
 > `tests/` are PascalCase.**
 
 For _how_ that enforcement is wired together, see
-[QUALITY_ARCHITECTURE.md](../01-config/QUALITY_ARCHITECTURE.md). This page says what
+[QUALITY_ARCHITECTURE.md](../02-tooling/QUALITY_ARCHITECTURE.md). This page says what
 the rules are; that page says how they are executed.
 
 ## Table of Contents
@@ -189,10 +189,11 @@ an API test needs neither — and that is what the Playwright projects in
 across a dozen sibling folders, and no project glob could pick them out without
 listing every one.
 
-> **Scope, honestly.** `tests/` currently contains one file, `tests/Example.spec.ts`.
-> The structure above is the target the framework is being built towards, not a tree
-> that exists today. It is written down ahead of the code so the first real spec
-> lands in the right place instead of setting a precedent by accident.
+> **Scope, honestly.** `tests/` is **empty**. There is no spec, and no `.setup.ts` file
+> for the `setup-auth-state` Playwright project to match. The structure above is the
+> target the framework is being built towards, not a tree that exists today. It is
+> written down ahead of the code so the first real spec lands in the right place
+> instead of setting a precedent by accident.
 
 ## Documentation Files
 
@@ -272,7 +273,7 @@ npm run verify:names
 
 To change a convention, edit the table in `naming.mjs`. The validator that runs it,
 `scripts/quality/validate-filenames.mjs`, never changes — that separation is the
-subject of [QUALITY_ARCHITECTURE.md](../01-config/QUALITY_ARCHITECTURE.md).
+subject of [QUALITY_ARCHITECTURE.md](../02-tooling/QUALITY_ARCHITECTURE.md).
 
 ## What Is Not Enforced
 

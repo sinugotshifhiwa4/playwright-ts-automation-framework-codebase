@@ -18,7 +18,7 @@ either fails `npm run lint` — underlined in the editor as you write it, and re
 by `.husky/pre-commit` if you push past that.
 
 For _naming_ — what a file is called and where it lives — see
-[CONVENTIONS.md](./CONVENTIONS.md).
+[CONVENTIONS.md](CONVENTIONS.md).
 
 ## Table of Contents
 

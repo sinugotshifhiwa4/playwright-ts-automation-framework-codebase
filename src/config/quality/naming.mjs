@@ -170,7 +170,7 @@ export const FILE_RULES = [
     convention: "UPPERCASE, underscore-separated",
     good: "ARCHITECTURE.md, DOCUMENTATION_PROMPT_GUIDE.md",
     bad: "architecture.md, Documentation-Prompt-Guide.md, ci-setup.md",
-    // Recursive on purpose: the rule holds inside docs/01-config/ just as it
+    // Recursive on purpose: the rule holds inside docs/02-tooling/ just as it
     // does at the top of docs/. README.md and LICENSE live at the repo root,
     // outside docs/, so they are untouched by this.
     appliesTo: (p) => p.startsWith("docs/") && p.endsWith(".md"),

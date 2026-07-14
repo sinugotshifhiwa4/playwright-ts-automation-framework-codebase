@@ -165,7 +165,7 @@ forgetting is thirty seconds — not a page that quietly goes unread for a year.
 ### Adding A Page
 
 1. Write it in the right section folder, named `UPPERCASE_WITH_UNDERSCORES.md` (see
-   [CONVENTIONS.md](03-rules/CONVENTIONS.md)).
+   [CONVENTIONS.md](01-rules/CONVENTIONS.md)).
 2. **Add a link to it in that folder's `README.md`**, with a one-line description of
    what it covers. Not the page's title restated — what a reader would open it for.
 3. Run `npm run verify:docs`.
@@ -257,7 +257,7 @@ the page is current.
 Set `alwaysApply: true` only for a page that must govern **every** interaction —
 the branching strategy, the commit workflow, the task-planning rule. Those are
 standing rules rather than reference material, and **every one of them lives in
-`docs/03-rules/`**, with no exceptions.
+`docs/01-rules/`**, with no exceptions.
 
 Everything else is `false`. A reference page is something you go and read when you
 need it; marking it always-apply claims it must be obeyed at all times, which for
@@ -350,7 +350,7 @@ validator.
 
 **Naming is not defined here.** Every filename and folder rule in the repository —
 including the ones for documents and skill docs — lives in
-[CONVENTIONS.md](03-rules/CONVENTIONS.md), and is enforced by `.husky/pre-commit`.
+[CONVENTIONS.md](01-rules/CONVENTIONS.md), and is enforced by `.husky/pre-commit`.
 Check a name with `npm run verify:names`.
 
 The short version, for a page you are about to create: **UPPERCASE with
@@ -405,15 +405,15 @@ with no arrows is noise.
 
 So that two pages describing the same kind of relationship look the same:
 
-| The page describes                          | Use                              | Reference                                                       |
-| ------------------------------------------- | -------------------------------- | --------------------------------------------------------------- |
-| An ordered path that can fail               | `flowchart TD`                   | The commit path, §2 of `docs/01-config/QUALITY_ARCHITECTURE.md` |
-| Layers and what crosses between them        | `graph TD` with `subgraph`       | The layers, §1 of `QUALITY_ARCHITECTURE.md`                     |
-| Two things that look duplicated but are not | `graph LR`                       | ESLint vs. the guards, §4 of `QUALITY_ARCHITECTURE.md`          |
-| A promotion or hand-off chain               | `graph LR`                       | `docs/03-rules/BRANCHING_STRATEGY.md`                           |
-| A decision with distinct outcomes           | `flowchart TD` from a `{ }` node | Skipping a test, §8 of `QUALITY_ARCHITECTURE.md`                |
+| The page describes                          | Use                              | Reference                                                        |
+| ------------------------------------------- | -------------------------------- | ---------------------------------------------------------------- |
+| An ordered path that can fail               | `flowchart TD`                   | The commit path, §2 of `docs/02-tooling/QUALITY_ARCHITECTURE.md` |
+| Layers and what crosses between them        | `graph TD` with `subgraph`       | The layers, §1 of `QUALITY_ARCHITECTURE.md`                      |
+| Two things that look duplicated but are not | `graph LR`                       | ESLint vs. the guards, §4 of `QUALITY_ARCHITECTURE.md`           |
+| A promotion or hand-off chain               | `graph LR`                       | `docs/01-rules/BRANCHING_STRATEGY.md`                            |
+| A decision with distinct outcomes           | `flowchart TD` from a `{ }` node | Skipping a test, §8 of `QUALITY_ARCHITECTURE.md`                 |
 
-`docs/01-config/QUALITY_ARCHITECTURE.md` is the reference implementation. Copy its
+`docs/02-tooling/QUALITY_ARCHITECTURE.md` is the reference implementation. Copy its
 patterns rather than inventing a new visual language.
 
 ### What Makes A Diagram Earn Its Place
@@ -484,8 +484,17 @@ Examples, grouped files, or a focused breakdown.
 What this part of the framework gives a contributor.
 ```
 
-Adjust the relative `README.md` path to the file's depth: `../README.md` from
-`docs/`, and `../../README.md` from `docs/01-config/` or `docs/03-rules/`.
+Adjust the relative `README.md` path to the file's depth. The back link always points at the
+**repository root** `README.md`, so count the folders you are actually in:
+
+| The page lives in                                | The back link is     |
+| ------------------------------------------------ | -------------------- |
+| `docs/`                                          | `../README.md`       |
+| `docs/01-rules/`, `docs/02-tooling/`             | `../../README.md`    |
+| `docs/03-core/foundation/`, `docs/04-layers/ui/` | `../../../README.md` |
+
+A section with subsections — `03-core/` and `04-layers/` both have them — puts its pages one
+level deeper than a flat section does, and the back link has to follow.
 
 ## Working With An AI Assistant
 
@@ -534,17 +543,17 @@ asked about.
 prompt, and in a `CLAUDE.md` import line:
 
 ```text
-@docs/03-rules/COMMIT_MESSAGES.md write a commit message for the changes in @src/config/quality/naming.mjs
+@docs/01-rules/COMMIT_MESSAGES.md write a commit message for the changes in @src/config/quality/naming.mjs
 ```
 
 ```text
-@docs/DOCUMENTATION_PROMPT_GUIDE.md does @docs/01-config/QUALITY_ARCHITECTURE.md meet the definition of done?
+@docs/DOCUMENTATION_PROMPT_GUIDE.md does @docs/02-tooling/QUALITY_ARCHITECTURE.md meet the definition of done?
 ```
 
 Several files can be attached at once:
 
 ```text
-@docs/01-config/QUALITY_ARCHITECTURE.md @src/config/quality/guards.mjs I want to add a guard for hardcoded URLs — where does it belong, and what else has to change?
+@docs/02-tooling/QUALITY_ARCHITECTURE.md @src/config/quality/guards.mjs I want to add a guard for hardcoded URLs — where does it belong, and what else has to change?
 ```
 
 `@` is the real mechanism: it loads the file, and in `CLAUDE.md` it is the line
@@ -557,8 +566,8 @@ Everywhere else a path appears, the rule is:
 
 | Where                              | Write it as                                 |
 | ---------------------------------- | ------------------------------------------- |
-| A prompt, or a `CLAUDE.md` import  | `@docs/03-rules/CONVENTIONS.md`             |
-| A link between documentation pages | `[CONVENTIONS.md](03-rules/CONVENTIONS.md)` |
+| A prompt, or a `CLAUDE.md` import  | `@docs/01-rules/CONVENTIONS.md`             |
+| A link between documentation pages | `[CONVENTIONS.md](01-rules/CONVENTIONS.md)` |
 | A file named in prose              | `` `src/config/quality/naming.mjs` ``       |
 
 If MCP servers are connected, `@server:resource` pulls in external data; the exact
@@ -571,7 +580,7 @@ Write a Markdown documentation page for this Playwright automation framework.
 
 Read these first, and follow them:
 @docs/DOCUMENTATION_PROMPT_GUIDE.md
-@docs/01-config/QUALITY_ARCHITECTURE.md
+@docs/02-tooling/QUALITY_ARCHITECTURE.md
 
 Rules:
 - Open with frontmatter: name (kebab-case), description (one sentence), alwaysApply: false.

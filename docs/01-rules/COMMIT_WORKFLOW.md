@@ -89,7 +89,7 @@ If the user requests corrections, apply them and return to Step 1.
 
 ### Step 3: Draft the Commit Message
 
-Once the user approves the changes, draft a commit message that follows the format in [COMMIT_MESSAGES.md](./COMMIT_MESSAGES.md).
+Once the user approves the changes, draft a commit message that follows the format in [COMMIT_MESSAGES.md](COMMIT_MESSAGES.md).
 
 The body must be 1–3 lines maximum. Write only the main reason the change was made. Do not list every file or change touched.
 

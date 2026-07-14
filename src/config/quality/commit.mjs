@@ -16,7 +16,7 @@
  * that subject, fails to match a Conventional Commit, and silently drops the commit
  * from the release notes. Nobody notices until the release notes are wrong.
  *
- * The format is defined in docs/03-rules/COMMIT_MESSAGES.md. This file is that
+ * The format is defined in docs/01-rules/COMMIT_MESSAGES.md. This file is that
  * document made executable, and the two must say the same thing.
  *
  *   <type>(<scope>): [PRODUCT-1234] <summary>
@@ -123,7 +123,7 @@ export const COMMIT_MSG = {
       `Keep the body to ${max} lines. Write why the change was made, not what every file does — the diff already says that.`,
 
     trailer: (trailer) =>
-      `Remove the "${trailer}" trailer. Commits carry no agent attribution — see docs/03-rules/AGENT_RULES.md.`,
+      `Remove the "${trailer}" trailer. Commits carry no agent attribution — see docs/01-rules/AGENT_RULES.md.`,
 
     emptySubject: () => `Write a subject line.`,
   },

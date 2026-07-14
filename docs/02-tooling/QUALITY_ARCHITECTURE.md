@@ -216,7 +216,7 @@ rewrite of published history. Caught at `commit-msg`, it costs one `git commit` 
 the staged files stay staged and the message stays in `.git/COMMIT_EDITMSG`.
 
 The format is declared in `src/config/quality/commit.mjs` and documented in
-[COMMIT_MESSAGES.md](../03-rules/COMMIT_MESSAGES.md).
+[COMMIT_MESSAGES.md](../01-rules/COMMIT_MESSAGES.md).
 
 ---
 
@@ -397,7 +397,7 @@ register it in `rules/index.mjs`, and reference it as `framework/<rule-name>`.
 ## 7. Conventions
 
 **The conventions themselves live in
-[docs/03-rules/CONVENTIONS.md](../03-rules/CONVENTIONS.md)** — every filename and
+[docs/01-rules/CONVENTIONS.md](../01-rules/CONVENTIONS.md)** — every filename and
 folder rule, what each one is for, and which of them are enforced. They are not
 repeated here, because a rule written down twice is a rule that will eventually
 disagree with itself.

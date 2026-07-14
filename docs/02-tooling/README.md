@@ -1,9 +1,15 @@
-# Config
+# Tooling
 
 **[← Back to Documentation](../README.md)**
 
-How the tooling is put together, and why. Reference material — read it when the task
-calls for it, not on every request.
+How the development tooling is put together, and why — the quality gates that run on every
+commit, and the agent setup that makes the planning rule hold. Reference material: read it
+when the task calls for it, not on every request.
+
+**This section is not about `src/config/`.** That is runtime configuration — the logger, the
+environment, the Playwright projects — and it lives in
+[03-core/](../03-core/README.md). This section is about the tooling that checks the
+code, not the code that runs the tests.
 
 | Page                                               | Covers                                                                                                 |
 | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |

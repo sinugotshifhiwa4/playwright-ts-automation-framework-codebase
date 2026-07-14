@@ -16,8 +16,8 @@ Every rule here exists because the failure it prevents is expensive and quiet. A
 agent that acts on a question instead of answering it has already changed the code
 by the time you realise you only wanted to know something.
 
-The rules on _naming_ live in [CONVENTIONS.md](./CONVENTIONS.md); the rules on
-_writing a method_ live in [CODE_QUALITY.md](./CODE_QUALITY.md).
+The rules on _naming_ live in [CONVENTIONS.md](CONVENTIONS.md); the rules on
+_writing a method_ live in [CODE_QUALITY.md](CODE_QUALITY.md).
 
 ## Table of Contents
 
@@ -139,13 +139,13 @@ If no feature branch exists when a task starts, stop and ask the user to create 
 before doing anything else.
 
 The naming rules and the promotion chain are in
-[BRANCHING_STRATEGY.md](./BRANCHING_STRATEGY.md).
+[BRANCHING_STRATEGY.md](BRANCHING_STRATEGY.md).
 
 ## Never Commit Without Approval
 
 The full workflow — lint check, summary, approval, draft message, Jira ticket,
-commit — is defined in [COMMIT_WORKFLOW.md](./COMMIT_WORKFLOW.md), and the message
-format in [COMMIT_MESSAGES.md](./COMMIT_MESSAGES.md). It is not repeated here.
+commit — is defined in [COMMIT_WORKFLOW.md](COMMIT_WORKFLOW.md), and the message
+format in [COMMIT_MESSAGES.md](COMMIT_MESSAGES.md). It is not repeated here.
 
 Two points bear restating because they are the ones most often eroded:
 

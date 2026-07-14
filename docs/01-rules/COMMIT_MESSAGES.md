@@ -39,7 +39,7 @@ Conventional Commit formatting, with the Jira ticket in the subject line.
 - test: <spec-file-name> (<test description>)
 ```
 
-**The ticket is optional.** [COMMIT_WORKFLOW.md](./COMMIT_WORKFLOW.md) step 4 says to
+**The ticket is optional.** [COMMIT_WORKFLOW.md](COMMIT_WORKFLOW.md) step 4 says to
 ask for one and to proceed without it if there is none, so a commit with no ticket is
 accepted. What is _not_ optional is that a ticket, when there is one, is written
 correctly: in square brackets, in the subject, immediately after the colon. A ticket
@@ -75,17 +75,17 @@ at `commit-msg`, it costs nothing.
 
 What is rejected:
 
-| Rejected                           | Why                                                            |
-| ---------------------------------- | -------------------------------------------------------------- |
-| `@ feat(quality): enforce naming`  | Anything before the type. The pattern is anchored at `^`.      |
-| `feature(ui): add login page`      | `feature` is not a type. It is `feat`.                         |
-| `config(eslint): add jsdoc module` | `config` is a scope, not a type. Use `refactor(config):`.      |
-| `feat: add login page`             | The scope is required.                                         |
-| `feat(UI): add login page`         | The scope must be lowercase.                                   |
-| `feat(ui): PRODUCT-1234 add login` | The ticket must be bracketed: `[PRODUCT-1234]`.                |
-| A subject over 72 characters       | It stops being scannable in `git log --oneline`.               |
-| A body over 3 lines                | The diff already lists the files, and does it better.          |
-| A `Co-Authored-By:` trailer        | No agent attribution — see [AGENT_RULES.md](./AGENT_RULES.md). |
+| Rejected                           | Why                                                          |
+| ---------------------------------- | ------------------------------------------------------------ |
+| `@ feat(quality): enforce naming`  | Anything before the type. The pattern is anchored at `^`.    |
+| `feature(ui): add login page`      | `feature` is not a type. It is `feat`.                       |
+| `config(eslint): add jsdoc module` | `config` is a scope, not a type. Use `refactor(config):`.    |
+| `feat: add login page`             | The scope is required.                                       |
+| `feat(UI): add login page`         | The scope must be lowercase.                                 |
+| `feat(ui): PRODUCT-1234 add login` | The ticket must be bracketed: `[PRODUCT-1234]`.              |
+| A subject over 72 characters       | It stops being scannable in `git log --oneline`.             |
+| A body over 3 lines                | The diff already lists the files, and does it better.        |
+| A `Co-Authored-By:` trailer        | No agent attribution — see [AGENT_RULES.md](AGENT_RULES.md). |
 
 `Merge`, `Revert`, `fixup!` and `squash!` messages are skipped: Git writes those, not
 you, and rejecting them would fail the one message its author never chose.
@@ -230,18 +230,18 @@ Attach the files with `@`, so the assistant reads the actual format rules rather
 guessing at a generic commit style:
 
 ```text
-@docs/03-rules/COMMIT_MESSAGES.md write a commit message for the changes in @src/config/quality/naming.mjs
+@docs/01-rules/COMMIT_MESSAGES.md write a commit message for the changes in @src/config/quality/naming.mjs
 ```
 
 ```text
-@docs/03-rules/COMMIT_MESSAGES.md does this commit message follow the framework format? <paste message here>
+@docs/01-rules/COMMIT_MESSAGES.md does this commit message follow the framework format? <paste message here>
 ```
 
 When the change touches a spec file, name it explicitly so the `test:` line can be
 written correctly:
 
 ```text
-@docs/03-rules/COMMIT_MESSAGES.md write a commit message. The Jira ticket is PRODUCT-1234. The spec file affected is Login.spec.ts. The test is "rejects an expired password".
+@docs/01-rules/COMMIT_MESSAGES.md write a commit message. The Jira ticket is PRODUCT-1234. The spec file affected is Login.spec.ts. The test is "rejects an expired password".
 ```
 
 This file is `alwaysApply: true` and imported by `CLAUDE.md`, so Claude Code already

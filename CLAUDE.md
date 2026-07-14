@@ -11,13 +11,13 @@ of intent — Claude Code does not read it — so a rule is only actually in for
 once it is imported here. **A new `alwaysApply: true` document must be added to
 this list, or it does nothing.**
 
-@docs/03-rules/AGENT_RULES.md
-@docs/03-rules/COMMIT_WORKFLOW.md
-@docs/03-rules/COMMIT_MESSAGES.md
-@docs/03-rules/BRANCHING_STRATEGY.md
-@docs/03-rules/CONVENTIONS.md
-@docs/03-rules/CODE_QUALITY.md
-@docs/03-rules/TASK_PLANNING.md
+@docs/01-rules/AGENT_RULES.md
+@docs/01-rules/COMMIT_WORKFLOW.md
+@docs/01-rules/COMMIT_MESSAGES.md
+@docs/01-rules/BRANCHING_STRATEGY.md
+@docs/01-rules/CONVENTIONS.md
+@docs/01-rules/CODE_QUALITY.md
+@docs/01-rules/TASK_PLANNING.md
 
 ## The Rules In Brief
 
@@ -53,7 +53,7 @@ constraints are impossible to miss:
 
 Not always-applied. Read when the task calls for it:
 
-- `docs/01-config/QUALITY_ARCHITECTURE.md` — how the quality tooling fits together.
+- `docs/02-tooling/QUALITY_ARCHITECTURE.md` — how the quality tooling fits together.
   Read before changing any configuration.
 - `docs/DOCUMENTATION_PROMPT_GUIDE.md` — how to write documentation in this repo.
   Read before adding or editing a page under `docs/`.

@@ -45,7 +45,7 @@ export default [
       //                     That is the exact failure mode this rule exists to
       //                     prevent, so it is turned on.
       //
-      // See docs/01-config/QUALITY_ARCHITECTURE.md §8 for the accepted/rejected matrix.
+      // See docs/02-tooling/QUALITY_ARCHITECTURE.md §8 for the accepted/rejected matrix.
       // ----------------------------------------------------------------------
       "playwright/no-focused-test": "error",
       "playwright/no-skipped-test": [

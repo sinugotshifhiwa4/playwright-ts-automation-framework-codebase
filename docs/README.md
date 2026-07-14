@@ -5,11 +5,13 @@
 All framework documentation lives here. Sections are numbered so they read in a
 sensible order, and each one carries its own index.
 
-| Section                                                        | What it covers                                                             | Applies                                           |
-| -------------------------------------------------------------- | -------------------------------------------------------------------------- | ------------------------------------------------- |
-| **[01 — Config](01-config/README.md)**                         | How the quality tooling fits together, and the gates that enforce it.      | On demand — read before changing configuration.   |
-| **[03 — Rules](03-rules/README.md)**                           | Conduct, task planning, naming, code quality, branching, commits.          | **Always.** Loaded every session via `CLAUDE.md`. |
-| [DOCUMENTATION_PROMPT_GUIDE.md](DOCUMENTATION_PROMPT_GUIDE.md) | How to write a page here: structure, diagrams, and the definition of done. | On demand — read before adding or editing a page. |
+| Section                                                        | What it covers                                                             | Applies                                              |
+| -------------------------------------------------------------- | -------------------------------------------------------------------------- | ---------------------------------------------------- |
+| **[01 — Rules](01-rules/README.md)**                           | Conduct, task planning, naming, code quality, branching, commits.          | **Always.** Loaded every session via `CLAUDE.md`.    |
+| **[02 — Tooling](02-tooling/README.md)**                       | The quality gates — ESLint, Husky, the validators — and the agent setup.   | On demand — read before changing the tooling.        |
+| **[03 — Core](03-core/README.md)**                             | `src/config/` + `src/utils/` — the machinery the layers are built on.      | On demand — read when working in the area.           |
+| **[04 — Layers](04-layers/README.md)**                         | `src/layers/` — the UI layer: page actions, browser context, login flow.   | On demand — read when writing a test or page object. |
+| [DOCUMENTATION_PROMPT_GUIDE.md](DOCUMENTATION_PROMPT_GUIDE.md) | How to write a page here: structure, diagrams, and the definition of done. | On demand — read before adding or editing a page.    |
 
 ## The Two Kinds Of Page
 
@@ -17,7 +19,7 @@ The distinction is the one thing worth understanding before reading anything els
 because it decides whether a page is a rule you must already be following or a
 reference you go and look up.
 
-- **Standing rules** live in [03-rules/](03-rules/README.md). They declare
+- **Standing rules** live in [01-rules/](01-rules/README.md). They declare
   `alwaysApply: true`, they are `@import`ed by `CLAUDE.md` at the repository root,
   and they are therefore in force on every request without anyone opening them.
 - **Everything else** is reference. It is `alwaysApply: false`, and it is read when

@@ -9,7 +9,7 @@ alwaysApply: false
 **[← Back to Main Documentation](../../README.md)**
 
 This page explains how to configure **your own machine** so the planning rule in
-[TASK_PLANNING.md](../03-rules/TASK_PLANNING.md) is actually obeyed on every request.
+[TASK_PLANNING.md](../01-rules/TASK_PLANNING.md) is actually obeyed on every request.
 
 The files it describes are not in this repository. They live in your home directory —
 `~/.claude/CLAUDE.md` and `~/.claude/settings.json` — and they apply to every project
@@ -17,7 +17,7 @@ you open, not just this one. That is deliberate, and it is the reason this is a 
 page rather than a rule: the repository cannot enforce a rule on a machine it does not
 own.
 
-It matters because the rule in `docs/03-rules/` **was not enough on its own.** That is
+It matters because the rule in `docs/01-rules/` **was not enough on its own.** That is
 not a hypothetical — see [Why This Page Exists](#why-this-page-exists).
 
 ## Table of Contents
@@ -33,7 +33,7 @@ not a hypothetical — see [Why This Page Exists](#why-this-page-exists).
 ## Why This Page Exists
 
 This repository already carries the planning rule.
-[TASK_PLANNING.md](../03-rules/TASK_PLANNING.md) declares `alwaysApply: true`, the root
+[TASK_PLANNING.md](../01-rules/TASK_PLANNING.md) declares `alwaysApply: true`, the root
 `CLAUDE.md` `@import`s it, and `scripts/quality/validate-always-apply.mjs` rejects any
 commit where those two disagree. By every mechanism the repository has, the rule is in
 force.
@@ -126,9 +126,9 @@ new request and each gets its own plan**, however small the edit looks.
 If a request is genuinely trivial, the plan is three lines. Write the three lines.
 ```
 
-This is the same requirement as [TASK_PLANNING.md](../03-rules/TASK_PLANNING.md), which
+This is the same requirement as [TASK_PLANNING.md](../01-rules/TASK_PLANNING.md), which
 governs this repository. The global copy exists so the rule travels to every other
-project on your machine, where `docs/03-rules/` does not.
+project on your machine, where `docs/01-rules/` does not.
 
 ## Step 2: Add The Hook To Your Global settings.json
 
@@ -209,7 +209,7 @@ Stated plainly, so nobody assumes more than is true:
   `~/.claude/` is outside it, so nothing here verifies your machine is configured —
   which is why this page tells you how to check it yourself.
 - **It is per-machine.** A teammate who clones this repository gets
-  `docs/03-rules/TASK_PLANNING.md` and nothing else. If you want them to have the gate,
+  `docs/01-rules/TASK_PLANNING.md` and nothing else. If you want them to have the gate,
   point them at this page.
 
 ## Practical Outcome

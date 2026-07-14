@@ -55,13 +55,15 @@ npx playwright install
 
 All docs live under [`docs/`](docs/README.md). Each section carries its own index.
 
-| Section                                                   | Description                                                       | Applies                                           |
-| --------------------------------------------------------- | ----------------------------------------------------------------- | ------------------------------------------------- |
-| **[01 — Config](docs/01-config/README.md)**               | How the quality tooling fits together and where it is enforced.   | On demand — read before changing configuration.   |
-| **[03 — Rules](docs/03-rules/README.md)**                 | Conduct, task planning, naming, code quality, branching, commits. | **Always.** Loaded every session via `CLAUDE.md`. |
-| [Documentation Guide](docs/DOCUMENTATION_PROMPT_GUIDE.md) | How to write a page: structure, diagrams, definition of done.     | On demand — read before editing `docs/`.          |
+| Section                                                   | Description                                                              | Applies                                              |
+| --------------------------------------------------------- | ------------------------------------------------------------------------ | ---------------------------------------------------- |
+| **[01 — Rules](docs/01-rules/README.md)**                 | Conduct, task planning, naming, code quality, branching, commits.        | **Always.** Loaded every session via `CLAUDE.md`.    |
+| **[02 — Tooling](docs/02-tooling/README.md)**             | The quality gates — ESLint, Husky, the validators — and the agent setup. | On demand — read before changing the tooling.        |
+| **[03 — Core](docs/03-core/README.md)**                   | `src/config/` + `src/utils/` — the machinery the layers are built on.    | On demand — read when working in the area.           |
+| **[04 — Layers](docs/04-layers/README.md)**               | `src/layers/` — page actions, browser context, and the login flow.       | On demand — read when writing a test or page object. |
+| [Documentation Guide](docs/DOCUMENTATION_PROMPT_GUIDE.md) | How to write a page: structure, diagrams, definition of done.            | On demand — read before editing `docs/`.             |
 
-The rules in **03 — Rules** are not optional reading. They declare `alwaysApply: true`
+The rules in **01 — Rules** are not optional reading. They declare `alwaysApply: true`
 and are imported by `CLAUDE.md`, so they are in force on every request whether or not
 anyone opens them.
 
