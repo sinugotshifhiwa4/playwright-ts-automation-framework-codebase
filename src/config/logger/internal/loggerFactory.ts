@@ -159,10 +159,16 @@ export default class LoggerFactory {
    * Creates a winston ConsoleTransportInstance with a level and format
    * determined by the environment. The level is determined by the getConsoleLogLevel
    * method, and the format is determined by the createConsoleFormat method.
+   *
+   * `ENV` is read and lower-cased here rather than through EnvironmentDetector: the detector
+   * reaches the file managers, which log — so importing it would close a cycle back into this
+   * factory. The duplicated normalisation is the price of the logger depending on nothing.
    * @returns A winston ConsoleTransportInstance with a level and format determined by the environment.
    */
   private static createConsoleTransport(): winston.transports.ConsoleTransportInstance {
-    const environment = (process.env.ENV as EnvironmentStage) ?? "qa";
+    const environment = (process.env.ENV ?? "dev")
+      .trim()
+      .toLowerCase() as EnvironmentStage;
 
     return new winston.transports.Console({
       level: this.getConsoleLogLevel(environment),

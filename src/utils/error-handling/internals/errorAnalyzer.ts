@@ -43,7 +43,7 @@ export default class ErrorAnalyzer {
       ...(context ? { context } : {}),
       message,
       timestamp: new Date().toISOString(),
-      environment: process.env.ENV ?? "qa",
+      environment: (process.env.ENV ?? "dev").trim().toLowerCase(),
       ...additionalDetails,
     };
 
@@ -245,7 +245,7 @@ export default class ErrorAnalyzer {
       ...(context ? { context } : {}),
       message: "Unknown error",
       timestamp: new Date().toISOString(),
-      environment: process.env.ENV ?? "qa",
+      environment: (process.env.ENV ?? "dev").trim().toLowerCase(),
     };
   }
 
