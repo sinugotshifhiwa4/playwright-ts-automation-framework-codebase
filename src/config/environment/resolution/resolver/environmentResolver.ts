@@ -1,8 +1,8 @@
 import { EnvironmentResolverHelpers } from "./internal/environmentResolver.helpers.js";
-import ErrorHandler from "../../../utils/error-handling/errorHandler.js";
-import EnvironmentVariables from "../../environment/variables/environmentVariables.js";
-import { ENV_KEYS } from "../../environment/variables/keys/environment.keys.js";
-import type { Credentials } from "../../authentication/types/credentials.types.js";
+import ErrorHandler from "../../../../utils/error-handling/errorHandler.js";
+import EnvironmentVariables from "../../variables/environmentVariables.js";
+import { ENV_KEYS } from "../../variables/keys/environment.keys.js";
+import type { Credentials } from "../../../authentication/types/credentials.types.js";
 
 export class EnvironmentResolver {
   /**

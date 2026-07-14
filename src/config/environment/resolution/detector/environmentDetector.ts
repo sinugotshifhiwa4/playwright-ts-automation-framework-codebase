@@ -1,5 +1,5 @@
-import StagesFilePathResolver from "../../../utils/path-resolver/envPathResolver.js";
-import type { EnvironmentStage } from "../../environment/constants/environment.const.js";
+import StagesFilePathResolver from "../../../../utils/path-resolver/envPathResolver.js";
+import type { EnvironmentStage } from "../../constants/environment.const.js";
 
 export default class EnvironmentDetector {
   /**

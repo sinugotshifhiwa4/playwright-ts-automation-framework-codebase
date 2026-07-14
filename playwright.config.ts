@@ -1,4 +1,5 @@
 import { defineConfig } from "@playwright/test";
+import EnvironmentDetector from "./src/config/environment/resolution/detector/environmentDetector.js";
 import {
   resolvedVideoSize,
   resolvedViewport,
@@ -6,7 +7,6 @@ import {
   browserProjects,
 } from "./src/config/projects/projects.config.js";
 import { reportConfig } from "./src/config/reports/ortoniReport.config.js";
-import EnvironmentDetector from "./src/config/resolution/detector/environmentDetector.js";
 import WorkerAllocator from "./src/config/runtime/workers/workerAllocator.js";
 import { GLOBAL_TIMEOUTS } from "./src/config/timeouts/global.timeouts.js";
 

@@ -1,7 +1,7 @@
-import EnvironmentFileManager from "./environment-manager/environmentFileManager.js";
 import ErrorHandler from "../../utils/error-handling/errorHandler.js";
 import AuthenticationFileManager from "../authentication/storage/authenticationFileManager.js";
-import EnvironmentDetector from "../resolution/detector/environmentDetector.js";
+import EnvironmentFileManager from "../environment/loader/environmentFileManager.js";
+import EnvironmentDetector from "../environment/resolution/detector/environmentDetector.js";
 
 /**
  * Loads all environment files so that environment variables are available before any test runs.

@@ -3,7 +3,7 @@ import { resolveCurrentMethod } from "../base/internal/callerSource.js";
 import type { AuthenticationStateManager } from "./authenticationStateManager.js";
 import type { LoginExecutor, LoginOutcome } from "./types/loginExecutor.types.js";
 import type { Credentials } from "../../../config/authentication/types/credentials.types.js";
-import type { EnvironmentResolver } from "../../../config/resolution/resolver/environmentResolver.js";
+import type { EnvironmentResolver } from "../../../config/environment/resolution/resolver/environmentResolver.js";
 import type { NavigationActions } from "../base/internal/actions/navigationActions.js";
 import type { Page } from "@playwright/test";
 

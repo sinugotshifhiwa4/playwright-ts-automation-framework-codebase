@@ -1,6 +1,6 @@
 import ErrorHandler from "../../../utils/error-handling/errorHandler.js";
 import DataSanitizer from "../../../utils/sanitization/dataSanitizer.js";
-import EnvironmentDetector from "../../resolution/detector/environmentDetector.js";
+import EnvironmentDetector from "../resolution/detector/environmentDetector.js";
 import type { Credentials } from "../../authentication/types/credentials.types.js";
 
 export default class VariableValidator {

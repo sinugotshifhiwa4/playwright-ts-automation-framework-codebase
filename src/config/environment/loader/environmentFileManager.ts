@@ -3,8 +3,8 @@ import ErrorHandler from "../../../utils/error-handling/errorHandler.js";
 import { AsyncFileManager } from "../../../utils/file-manager/asyncFileManager.js";
 import EnvPathResolver from "../../../utils/path-resolver/envPathResolver.js";
 import logger from "../../logger/loggerManager.js";
-import EnvironmentDetector from "../../resolution/detector/environmentDetector.js";
-import type { EnvironmentFile } from "../../environment/constants/environment.const.js";
+import EnvironmentDetector from "../resolution/detector/environmentDetector.js";
+import type { EnvironmentFile } from "../constants/environment.const.js";
 
 export default class EnvironmentFileManager {
   private static instance: EnvironmentFileManager;

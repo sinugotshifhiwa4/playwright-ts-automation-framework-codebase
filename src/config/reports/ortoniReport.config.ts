@@ -1,6 +1,6 @@
 import * as os from "os";
 import DateFormatter from "../../utils/shared/dateFormatter.js";
-import EnvironmentDetector from "../resolution/detector/environmentDetector.js";
+import EnvironmentDetector from "../environment/resolution/detector/environmentDetector.js";
 import type { OrtoniReportConfig } from "ortoni-report";
 
 // The Ortoni report is generated once — locally per run, or in CI during the

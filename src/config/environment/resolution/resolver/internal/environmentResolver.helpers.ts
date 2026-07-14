@@ -1,6 +1,6 @@
-import VariableValidator from "../../../environment/variables/variableValidator.js";
+import VariableValidator from "../../../variables/variableValidator.js";
 import EnvironmentDetector from "../../detector/environmentDetector.js";
-import type { Credentials } from "../../../authentication/types/credentials.types.js";
+import type { Credentials } from "../../../../authentication/types/credentials.types.js";
 
 export class EnvironmentResolverHelpers {
   /**
