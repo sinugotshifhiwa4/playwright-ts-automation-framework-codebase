@@ -1,0 +1,50 @@
+#!/usr/bin/env sh
+#
+# The commit gate. Fast, staged-scope checks only — anything project-wide that
+# takes real time belongs in pre-push, because a slow pre-commit is a hook people
+# learn to bypass with --no-verify.
+#
+# Order is deliberate, and the repair step comes before the verification steps.
+# lint-staged rewrites files and re-stages them, so anything that runs before it
+# is judging bytes that will not be the bytes in the commit. The guards read the
+# index precisely so they can judge the commit, so they have to run after the
+# last thing that rewrites the index.
+#
+# Filenames are the exception, and can run first: lint-staged fixes contents, it
+# never renames a file, so its result cannot change the answer.
+#
+# Steps 4 and 5 are the two project-wide checks that cannot be skipped. TypeScript
+# errors cross file boundaries, so editing a page object can break a spec that is
+# not staged — types are the only thing lint-staged's file-scoped view cannot see.
+# The always-apply check is project-wide for a different reason: it compares two
+# files, and the edit that breaks it (deleting an @import from CLAUDE.md) leaves
+# the rule's own file untouched, so a staged-scope check would never see it.
+set -e
+
+echo "▸ 1/6  Filename conventions"
+node scripts/quality/validate-filenames.mjs
+
+echo "▸ 2/6  lint-staged  (eslint --fix → prettier --write → re-stage)"
+npx lint-staged
+
+echo "▸ 3/6  Content guards (secrets, .only, console.log, conflicts, file size)"
+node scripts/quality/guard-staged.mjs
+
+echo "▸ 4/6  Always-apply rules (alwaysApply: true ⇔ imported by CLAUDE.md)"
+node scripts/quality/validate-always-apply.mjs
+
+# Project-wide for the same reason as the check above: it compares two files, and
+# the edit that breaks it (adding a page, forgetting the index) leaves the index
+# untouched — so a staged-scope check would miss the one case it exists to catch.
+echo "▸ 5/6  Documentation index (every page linked from its folder's README)"
+node scripts/quality/validate-doc-index.mjs
+
+# Unlike every check above it, this one reads the working tree rather than the
+# index — a true index-scoped typecheck would need the whole project checked out
+# to a temp directory, which costs more than it is worth on every commit. The
+# gap is real: with `git add -p`, unstaged code can make a partially-staged
+# commit typecheck clean here and still break CI. pre-push closes it.
+echo "▸ 6/6  TypeScript (project-wide, working tree)"
+npx tsc --noEmit
+
+echo "✔ pre-commit passed"

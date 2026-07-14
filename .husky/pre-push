@@ -1,0 +1,33 @@
+#!/usr/bin/env sh
+#
+# The push gate — the last checkpoint before code becomes someone else's problem.
+#
+# Where pre-commit judges *your staged change*, this judges *the whole repository*
+# as CI will see it. The distinction matters: a merge, a rebase, or a colleague's
+# commit can break the tree without any of your files being involved, and a
+# staged-scope hook would never notice.
+#
+# `npm run validate` is the identical command CI runs, so a green push is a
+# strong predictor of a green pipeline. Keeping them literally the same script —
+# rather than two lists that drift apart — is the point.
+set -e
+
+echo "▸ 1/2  Repository-wide conventions"
+node scripts/quality/validate-filenames.mjs --all
+node scripts/quality/guard-staged.mjs --all
+
+echo "▸ 2/2  Validate (typecheck → lint → format → markdown)"
+npm run validate
+
+# Smoke tests are opt-in. They are the only check here that needs a browser and a
+# reachable environment, so making them mandatory would make pushing impossible
+# offline or on a plane. Enable per-push with `RUN_SMOKE=1 git push`, or make it
+# permanent with `git config --local hooks.smoke true`.
+if [ "$RUN_SMOKE" = "1" ] || [ "$(git config --local --get hooks.smoke)" = "true" ]; then
+  echo "▸ +    Smoke tests (@smoke)"
+  npm run test:smoke
+else
+  echo "▸ +    Smoke tests skipped  (RUN_SMOKE=1 git push to run them)"
+fi
+
+echo "✔ pre-push passed"

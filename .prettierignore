@@ -1,0 +1,8 @@
+node_modules/
+playwright-report/
+all-blob-reports/
+blob-report-*/
+test-results/
+coverage/
+.playwright-browsers/
+.npm/
