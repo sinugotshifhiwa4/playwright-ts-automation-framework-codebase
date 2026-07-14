@@ -57,4 +57,16 @@ export default [
       "no-console": "off",
     },
   },
+
+  // A Playwright fixture that depends on no other fixture is still handed the
+  // fixtures object, and the only way to say "I need nothing from it" is to
+  // destructure nothing: async ({}, use). The signature is Playwright's, not the
+  // author's, so the rule has nothing to catch here. It stays on everywhere else,
+  // where an empty destructure really is a mistake.
+  {
+    files: ["fixtures/**/*.ts"],
+    rules: {
+      "no-empty-pattern": "off",
+    },
+  },
 ];
