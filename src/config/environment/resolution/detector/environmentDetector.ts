@@ -1,4 +1,4 @@
-import StagesFilePathResolver from "../../../../utils/path-resolver/envPathResolver.js";
+import EnvPathResolver from "../../../../utils/path-resolver/envPathResolver.js";
 import type { EnvironmentStage } from "../../constants/environment.const.js";
 
 export default class EnvironmentDetector {
@@ -24,7 +24,7 @@ export default class EnvironmentDetector {
    */
   public static getCurrentEnvironmentStage(): EnvironmentStage {
     const env = process.env.ENV ?? process.env.NODE_ENV ?? "dev";
-    return StagesFilePathResolver.isValidStage(env) ? env : "dev";
+    return EnvPathResolver.isValidStage(env) ? env : "dev";
   }
 
   /**

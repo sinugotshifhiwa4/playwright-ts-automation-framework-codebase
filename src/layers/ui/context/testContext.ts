@@ -1,4 +1,5 @@
 import ErrorHandler from "../../../utils/error-handling/errorHandler.js";
+import { resolveCurrentMethod } from "../base/internal/callerSource.js";
 
 export class TestContext {
   /**
@@ -24,7 +25,9 @@ export class TestContext {
    */
   public get<T>(key: string): T {
     if (!(key in this.data)) {
-      ErrorHandler.logAndThrow("get", `Key "${key}" does not exist.`);
+      // Named from the stack rather than hard-coded: a literal "get" is a string that
+      // nothing checks and that is wrong the first time the method is renamed.
+      ErrorHandler.logAndThrow(resolveCurrentMethod(), `Key "${key}" does not exist.`);
     }
     return this.data[key] as T;
   }

@@ -3,12 +3,15 @@
  */
 export default class DateFormatter {
   /**
-   * Returns a string representing the current local time in the format of 'YYYY-MM-DD HH:MM:SS'.
+   * Returns the current local time as a compact, filename-safe timestamp: `yyyyMMddHHmmss`.
    *
+   * The parts are joined with no separator on purpose. The value is used inside filenames —
+   * a downloaded artifact, a generated id — where a colon is illegal on Windows and a space
+   * is a nuisance in a shell.
    * @example
    * const currentTime = DateFormatter.formatLocalTime();
-   * logger.info(currentTime); // '2022-07-22 14:30:00'
-   * @returns A string representing the current local time.
+   * logger.info(currentTime); // '20220722143000'
+   * @returns The current local time as an unseparated timestamp.
    */
   public static formatLocalTime(): string {
     const now = new Date();
@@ -23,9 +26,10 @@ export default class DateFormatter {
   }
 
   /**
-   * Formats a given date into a string in the format of 'YYYY-MM-DD HH:MM:SS'.
+   * Formats a given date as a compact, filename-safe timestamp: `yyyyMMddHHmmss`.
+   * The same format as {@link formatLocalTime}, for a supplied date rather than now.
    * @param date - The date to be formatted.
-   * @returns The formatted date string.
+   * @returns The date as an unseparated timestamp, e.g. `20220722143000`.
    */
   public static formatDate(date: Date): string {
     return [
