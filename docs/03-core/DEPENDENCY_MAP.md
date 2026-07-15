@@ -6,7 +6,7 @@ alwaysApply: false
 
 # Dependency Map
 
-**[← Back to Main Documentation](../../README.md)**
+**[← Back to Core](README.md)**
 
 This page is the map of `src/`. It shows which module imports which, the layers that
 fall out of those imports, and where the graph is entered when a test actually runs.

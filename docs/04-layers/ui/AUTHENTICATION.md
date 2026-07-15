@@ -6,7 +6,7 @@ alwaysApply: false
 
 # Authentication
 
-**[← Back to Main Documentation](../../../README.md)**
+**[← Back to UI Layer](README.md)**
 
 This page explains how a test arrives at the application already signed in. The code lives
 in `src/layers/ui/authentication/`, but the flow reaches beyond it — into

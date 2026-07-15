@@ -6,7 +6,7 @@ alwaysApply: false
 
 # Authentication Storage
 
-**[← Back to Main Documentation](../../../README.md)**
+**[← Back to Execution](README.md)**
 
 This page covers `src/config/authentication/` — the **file** that holds a signed-in session,
 and the code that resolves, resets, and writes it.

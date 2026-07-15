@@ -6,7 +6,7 @@ alwaysApply: false
 
 # Quality Architecture
 
-**[← Back to Main Documentation](../../README.md)**
+**[← Back to Tooling](README.md)**
 
 This document explains how the tooling fits together. It is the file to read
 before changing any configuration, because almost every file in this repository

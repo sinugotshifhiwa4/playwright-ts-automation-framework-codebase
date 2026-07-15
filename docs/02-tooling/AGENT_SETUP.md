@@ -6,7 +6,7 @@ alwaysApply: false
 
 # Agent Setup
 
-**[← Back to Main Documentation](../../README.md)**
+**[← Back to Tooling](README.md)**
 
 This page explains how to configure **your own machine** so the planning rule in
 [TASK_PLANNING.md](../01-rules/TASK_PLANNING.md) is actually obeyed on every request.

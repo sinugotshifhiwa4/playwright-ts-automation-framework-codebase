@@ -6,7 +6,7 @@ alwaysApply: false
 
 # Environment Variables
 
-**[← Back to Main Documentation](../../../README.md)**
+**[← Back to Environment](README.md)**
 
 This page covers `src/config/environment/variables/` — the typed surface between
 `process.env`, which is a bag of possibly-undefined strings, and the rest of the framework,

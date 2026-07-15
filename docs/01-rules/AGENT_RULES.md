@@ -6,7 +6,7 @@ alwaysApply: true
 
 # Agent Rules
 
-**[← Back to Main Documentation](../../README.md)**
+**[← Back to Rules](README.md)**
 
 This page governs how an AI assistant behaves in this repository. It is about
 **conduct**, not about code: what the assistant may do on its own, and where it must

@@ -6,7 +6,7 @@ alwaysApply: false
 
 # Environment Resolution
 
-**[← Back to Main Documentation](../../../README.md)**
+**[← Back to Environment](README.md)**
 
 This page covers `src/config/environment/resolution/` — the two questions the framework
 asks about its own surroundings:

@@ -6,7 +6,7 @@ alwaysApply: false
 
 # Error Handling
 
-**[← Back to Main Documentation](../../../README.md)**
+**[← Back to Foundation](README.md)**
 
 This page explains what happens to an error between the moment it is caught and the
 moment it appears in `logs/error.log`. The code lives in

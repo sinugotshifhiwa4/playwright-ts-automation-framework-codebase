@@ -6,7 +6,7 @@ alwaysApply: true
 
 # Commit Workflow
 
-**[← Back to Main Documentation](../../README.md)**
+**[← Back to Rules](README.md)**
 
 This page defines the step-by-step workflow Claude must follow before creating a commit.
 

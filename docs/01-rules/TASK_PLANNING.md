@@ -6,7 +6,7 @@ alwaysApply: true
 
 # Task Planning And Execution
 
-**[← Back to Main Documentation](../../README.md)**
+**[← Back to Rules](README.md)**
 
 This page defines how work is planned and executed in this framework: plan before
 implementing, track progress against an explicit TODO list, and validate each task

@@ -6,7 +6,7 @@ alwaysApply: false
 
 # Execution Commands
 
-**[← Back to Main Documentation](../../README.md)**
+**[← Back to Commands](README.md)**
 
 This page is the command reference for this repository: the quality commands, the test
 commands, and every environment variable the framework reads at runtime.

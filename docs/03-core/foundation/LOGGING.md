@@ -6,7 +6,7 @@ alwaysApply: false
 
 # Logging
 
-**[← Back to Main Documentation](../../../README.md)**
+**[← Back to Foundation](README.md)**
 
 This page explains how logging works in the framework. The code lives in
 `src/config/logger/`, and a second, separate logger lives in `scripts/logger/`.

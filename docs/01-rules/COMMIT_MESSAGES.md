@@ -6,7 +6,7 @@ alwaysApply: true
 
 # Commit Messages
 
-**[← Back to Main Documentation](../../README.md)**
+**[← Back to Rules](README.md)**
 
 This page defines the commit message format for the PRODUCT automation framework.
 

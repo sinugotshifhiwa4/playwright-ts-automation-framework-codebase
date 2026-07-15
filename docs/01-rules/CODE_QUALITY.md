@@ -6,7 +6,7 @@ alwaysApply: true
 
 # Code Quality
 
-**[← Back to Main Documentation](../../README.md)**
+**[← Back to Rules](README.md)**
 
 This page defines the standards a method must meet before it can be committed. Two
 of them: **every method carries a JSDoc block**, and a handful of **syntax rules**

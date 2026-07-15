@@ -6,7 +6,7 @@ alwaysApply: false
 
 # Architecture
 
-**[← Back to Main Documentation](../README.md)**
+**[← Back to Documentation](README.md)**
 
 This page is the map of the **whole framework**: what actually happens between typing a command
 and reading a report, which folder is responsible for each step, and which page documents it.

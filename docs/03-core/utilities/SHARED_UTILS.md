@@ -6,7 +6,7 @@ alwaysApply: false
 
 # Shared Utils
 
-**[← Back to Main Documentation](../../../README.md)**
+**[← Back to Utilities](README.md)**
 
 This page covers `src/utils/shared/` — a folder of small, dependency-light helpers that do not
 belong to any one area of the framework.

@@ -6,7 +6,7 @@ alwaysApply: false
 
 # Sanitization
 
-**[← Back to Main Documentation](../../../README.md)**
+**[← Back to Foundation](README.md)**
 
 This page explains how the framework keeps credentials, tokens, and personal data out
 of the things it writes down. The code lives in `src/utils/sanitization/`.

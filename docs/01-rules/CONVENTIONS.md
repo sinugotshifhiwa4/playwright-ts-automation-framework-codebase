@@ -6,7 +6,7 @@ alwaysApply: true
 
 # Conventions
 
-**[← Back to Main Documentation](../../README.md)**
+**[← Back to Rules](README.md)**
 
 This page is the single source of truth for what a file is called and where it
 lives. It covers folders first, then source files, tests, and documentation.

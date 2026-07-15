@@ -6,7 +6,7 @@ alwaysApply: true
 
 # Branching Strategy
 
-**[← Back to Main Documentation](../../README.md)**
+**[← Back to Rules](README.md)**
 
 This page defines the branching strategy for the PRODUCT automation framework.
 

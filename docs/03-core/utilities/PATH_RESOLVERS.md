@@ -6,7 +6,7 @@ alwaysApply: false
 
 # Path Resolvers
 
-**[← Back to Main Documentation](../../../README.md)**
+**[← Back to Utilities](README.md)**
 
 This page covers `src/utils/path-resolver/`. Two classes, each answering one question:
 

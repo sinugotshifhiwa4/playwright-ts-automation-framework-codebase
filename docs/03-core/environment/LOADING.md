@@ -6,7 +6,7 @@ alwaysApply: false
 
 # Environment Loading
 
-**[← Back to Main Documentation](../../../README.md)**
+**[← Back to Environment](README.md)**
 
 This page covers the **write** half of the environment: how a value in `envs/.env.qa`
 ends up in `process.env`, and when. The code lives in

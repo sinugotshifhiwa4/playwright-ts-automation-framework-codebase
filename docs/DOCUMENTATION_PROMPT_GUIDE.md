@@ -6,7 +6,7 @@ alwaysApply: false
 
 # Documentation Prompt Guide
 
-**[← Back to Main Documentation](../README.md)**
+**[← Back to Documentation](README.md)**
 
 This page is the documentation standard for this repository. It defines how a page
 is produced, what shape it must have, and when it is allowed to be called finished.
@@ -455,7 +455,7 @@ alwaysApply: false
 
 # Page Title
 
-**[← Back to Main Documentation](../../README.md)**
+**[← Back to <Section>](README.md)**
 
 This page explains…
 
@@ -484,17 +484,21 @@ Examples, grouped files, or a focused breakdown.
 What this part of the framework gives a contributor.
 ```
 
-Adjust the relative `README.md` path to the file's depth. The back link always points at the
-**repository root** `README.md`, so count the folders you are actually in:
+The back link always points at the **README in the page's own folder** — its section index,
+never the repository root. Because it is always the sibling `README.md`, the path does not
+change with depth:
 
-| The page lives in                                | The back link is     |
-| ------------------------------------------------ | -------------------- |
-| `docs/`                                          | `../README.md`       |
-| `docs/01-rules/`, `docs/02-tooling/`             | `../../README.md`    |
-| `docs/03-core/foundation/`, `docs/04-layers/ui/` | `../../../README.md` |
+| The page lives in                                | The back link is |
+| ------------------------------------------------ | ---------------- |
+| `docs/`                                          | `README.md`      |
+| `docs/01-rules/`, `docs/02-tooling/`             | `README.md`      |
+| `docs/03-core/foundation/`, `docs/04-layers/ui/` | `README.md`      |
 
-A section with subsections — `03-core/` and `04-layers/` both have them — puts its pages one
-level deeper than a flat section does, and the back link has to follow.
+Navigation climbs one level at a time: a content page returns to its section README, that
+section README returns to the main documentation index (`docs/README.md`), and the main index
+returns to the repository root. A page never reaches past its own section to link the root
+directly. Label the link with the section it returns to — `[← Back to Rules](README.md)`,
+`[← Back to Execution](README.md)` — not a generic "Main Documentation".
 
 ## Working With An AI Assistant
 

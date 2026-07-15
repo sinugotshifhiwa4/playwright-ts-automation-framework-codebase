@@ -6,7 +6,7 @@ alwaysApply: false
 
 # Playwright Projects
 
-**[← Back to Main Documentation](../../../README.md)**
+**[← Back to Execution](README.md)**
 
 This page covers `src/config/projects/` and `src/config/flags/` — the code that builds the
 `projects` array `playwright.config.ts` hands to Playwright.

@@ -6,7 +6,7 @@ alwaysApply: false
 
 # Worker Allocation
 
-**[← Back to Main Documentation](../../../README.md)**
+**[← Back to Execution](README.md)**
 
 This page covers `src/config/runtime/workers/` — one class, `WorkerAllocator`, whose entire
 job is to answer a single question `playwright.config.ts` asks once per run:
